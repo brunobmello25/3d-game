@@ -17,14 +17,22 @@ func main() {
 	)
 
 	for !rl.WindowShouldClose() {
+		rl.UpdateCamera(&camera, rl.CameraFirstPerson)
+
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.RayWhite)
 
 		rl.BeginMode3D(camera)
-		// Draw voxels here
+
+		blockPos := rl.NewVector3(0, 0, 0)
+		blockSize := rl.NewVector3(1, 1, 1)
+
+		rl.DrawCubeV(blockPos, blockSize, rl.Brown)
+		rl.DrawCubeWiresV(blockPos, blockSize, rl.Black)
+
 		rl.EndMode3D()
 
-		rl.DrawText("Very basic voxel world", 10, 10, 20, rl.DarkGray)
+		rl.DrawText("Move with WASD", 10, 10, 20, rl.DarkGray)
 		rl.EndDrawing()
 	}
 
