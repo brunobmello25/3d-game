@@ -7,7 +7,7 @@ func main() {
 	rl.InitWindow(screenWidth, screenHeight, "Minecraft Clone")
 
 	camera := rl.NewCamera3D(
-		rl.NewVector3(32, 24, 32), // position
+		rl.NewVector3(32, 70, 32), // position
 		rl.NewVector3(0, 0, 0),    // target
 		rl.NewVector3(0, 1, 0),    // up
 		60,                        // fov
@@ -17,7 +17,7 @@ func main() {
 	rl.DisableCursor()
 	rl.SetTargetFPS(60)
 
-	chunk := NewChunk(0, 0, 0)
+	chunks := buildChunks()
 
 	for !rl.WindowShouldClose() {
 		UpdateCamera(&camera)
@@ -28,7 +28,9 @@ func main() {
 
 		rl.BeginMode3D(camera)
 
-		chunk.Draw()
+		for _, chunk := range chunks {
+			chunk.Draw()
+		}
 
 		rl.EndMode3D()
 
@@ -36,4 +38,19 @@ func main() {
 	}
 
 	rl.CloseWindow()
+}
+
+func buildChunks() []*Chunk {
+	width, depth := 5, 5
+
+	chunks := []*Chunk{}
+
+	for x := range width {
+		for z := range depth {
+			chunk := NewChunk(x, 0, z)
+			chunks = append(chunks, chunk)
+		}
+	}
+
+	return chunks
 }
