@@ -36,4 +36,11 @@ func UpdateCamera(camera *rl.Camera) {
 	if rl.IsKeyDown(rl.KeyD) {
 		rl.CameraMoveRight(camera, CAMERA_SPEED, moveInWorldPlane)
 	}
+	if rl.IsKeyDown(rl.KeySpace) {
+		rl.CameraMoveUp(camera, CAMERA_SPEED)
+	}
+	if rl.IsKeyDown(rl.KeyLeftShift) {
+		rl.CameraMoveUp(camera, -CAMERA_SPEED)
+	}
+
 }
