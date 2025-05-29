@@ -1,3 +1,3 @@
 
 run:
-	go run -tags sdl ./main.go
+	go run -tags sdl ./src/
