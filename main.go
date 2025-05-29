@@ -6,15 +6,16 @@ func main() {
 	screenWidth, screenHeight := int32(800), int32(600)
 	rl.InitWindow(screenWidth, screenHeight, "Minecraft Clone")
 
-	rl.SetTargetFPS(60)
-
 	camera := rl.NewCamera3D(
 		rl.NewVector3(16, 16, 16), // position
 		rl.NewVector3(0, 0, 0),    // target
 		rl.NewVector3(0, 1, 0),    // up
-		45,                        // fov
+		60,                        // fov
 		rl.CameraPerspective,
 	)
+
+	rl.DisableCursor()
+	rl.SetTargetFPS(60) // Set our game to run at 60 frames-per-second
 
 	for !rl.WindowShouldClose() {
 		rl.UpdateCamera(&camera, rl.CameraFirstPerson)
