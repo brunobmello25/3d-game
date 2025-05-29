@@ -3,7 +3,7 @@ package main
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 func main() {
-	screenWidth, screenHeight := int32(800), int32(600)
+	screenWidth, screenHeight := int32(1200), int32(675)
 	rl.InitWindow(screenWidth, screenHeight, "Minecraft Clone")
 
 	camera := rl.NewCamera3D(
@@ -17,7 +17,7 @@ func main() {
 	rl.DisableCursor()
 	rl.SetTargetFPS(60)
 
-	chunk := NewChunk(32, 32, 32)
+	chunk := NewChunk(16, 16, 16)
 
 	for !rl.WindowShouldClose() {
 		UpdateCamera(&camera)

@@ -3,7 +3,8 @@ package main
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 const (
-	CAMERA_SPEED = 0.09
+	CAMERA_SPEED      = 0.18
+	MOUSE_SENSITIVITY = 0.006
 )
 
 func UpdateCamera(camera *rl.Camera) {
@@ -19,28 +20,8 @@ func UpdateCamera(camera *rl.Camera) {
 
 	var rotateUp uint8
 
-	// Camera rotation
-	if rl.IsKeyDown(rl.KeyDown) {
-		rl.CameraPitch(camera, -0.03, lockView, rotateAroundTarget, rotateUp)
-	}
-	if rl.IsKeyDown(rl.KeyUp) {
-		rl.CameraPitch(camera, 0.03, lockView, rotateAroundTarget, rotateUp)
-	}
-	if rl.IsKeyDown(rl.KeyRight) {
-		rl.CameraYaw(camera, -0.03, rotateAroundTarget)
-	}
-	if rl.IsKeyDown(rl.KeyLeft) {
-		rl.CameraYaw(camera, 0.03, rotateAroundTarget)
-	}
-	if rl.IsKeyDown(rl.KeyQ) {
-		rl.CameraRoll(camera, -0.03)
-	}
-	if rl.IsKeyDown(rl.KeyE) {
-		rl.CameraRoll(camera, 0.03)
-	}
-
-	rl.CameraYaw(camera, -mousePositionDelta.X*0.003, rotateAroundTarget)
-	rl.CameraPitch(camera, -mousePositionDelta.Y*0.003, lockView, rotateAroundTarget, rotateUp)
+	rl.CameraYaw(camera, -mousePositionDelta.X*MOUSE_SENSITIVITY, rotateAroundTarget)
+	rl.CameraPitch(camera, -mousePositionDelta.Y*MOUSE_SENSITIVITY, lockView, rotateAroundTarget, rotateUp)
 
 	// Keyboard support
 	if rl.IsKeyDown(rl.KeyW) {
