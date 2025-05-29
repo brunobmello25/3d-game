@@ -23,6 +23,7 @@ func main() {
 		UpdateCamera(&camera)
 
 		rl.BeginDrawing()
+
 		rl.ClearBackground(rl.RayWhite)
 
 		rl.BeginMode3D(camera)
@@ -31,7 +32,6 @@ func main() {
 
 		rl.EndMode3D()
 
-		rl.DrawText("Move with WASD", 10, 10, 20, rl.DarkGray)
 		rl.EndDrawing()
 	}
 
