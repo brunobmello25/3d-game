@@ -20,7 +20,7 @@ func main() {
 	chunk := NewChunk(32, 32, 32)
 
 	for !rl.WindowShouldClose() {
-		rl.UpdateCamera(&camera, rl.CameraFirstPerson)
+		UpdateCamera(&camera)
 
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.RayWhite)
