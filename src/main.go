@@ -17,7 +17,7 @@ func main() {
 	rl.DisableCursor()
 	rl.SetTargetFPS(60)
 
-	chunk := NewChunk(16, 16, 16)
+	chunk := NewChunk(0, 0, 0)
 
 	for !rl.WindowShouldClose() {
 		UpdateCamera(&camera)

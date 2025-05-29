@@ -3,15 +3,20 @@ package main
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 type Chunk struct {
-	Width, Height, Depth int
+	X, Y, Z              int
+	width, height, depth int
 	blocks               []Block
 }
 
-func NewChunk(width, height, depth int) *Chunk {
+func NewChunk(x, y, z int) *Chunk {
+	width, height, depth := 16, 16, 16
 	c := &Chunk{
-		Width:  width,
-		Height: height,
-		Depth:  depth,
+		width:  width,
+		height: height,
+		depth:  depth,
+		X:      x,
+		Y:      y,
+		Z:      z,
 		blocks: make([]Block, width*height*depth),
 	}
 
@@ -35,11 +40,11 @@ func NewChunk(width, height, depth int) *Chunk {
 }
 
 func (c *Chunk) idx(x, y, z int) int {
-	return x + c.Width*(y+c.Height*z)
+	return x + c.width*(y+c.height*z)
 }
 
 func (c *Chunk) SetBlock(x, y, z int, block Block) int {
-	if x < 0 || x >= c.Width || y < 0 || y >= c.Height || z < 0 || z >= c.Depth {
+	if x < 0 || x >= c.width || y < 0 || y >= c.height || z < 0 || z >= c.depth {
 		panic("Index out of bounds")
 	}
 
@@ -49,12 +54,12 @@ func (c *Chunk) SetBlock(x, y, z int, block Block) int {
 }
 
 func (c *Chunk) Draw() {
-	for x := range c.Width {
-		for y := range c.Height {
-			for z := range c.Depth {
+	for x := range c.width {
+		for y := range c.height {
+			for z := range c.depth {
 				block := c.blocks[c.idx(x, y, z)]
 				if block.Type != BlockAir {
-					pos := rl.NewVector3(float32(x), float32(y), float32(z))
+					pos := rl.NewVector3(float32(c.X*c.width+x), float32(c.Y+c.height+y), float32(c.Z*c.depth+z))
 					block.Draw(pos)
 				}
 			}
