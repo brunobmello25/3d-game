@@ -34,8 +34,11 @@ func main() {
 	rl.SetTargetFPS(60)
 
 	// chunks := buildChunks()
-	block := NewBlock(BlockGrass)
-	position := rl.NewVector3(28, 65, 28)
+	block1 := NewBlock(BlockGrass)
+	position1 := rl.NewVector3(28, 65, 28)
+
+	block2 := NewBlock(BlockStone)
+	position2 := rl.NewVector3(50, 65, 28)
 
 	for !rl.WindowShouldClose() {
 		UpdateCamera(&camera)
@@ -46,7 +49,8 @@ func main() {
 
 		rl.BeginMode3D(camera)
 
-		block.Draw(position)
+		block1.Draw(position1)
+		block2.Draw(position2)
 
 		// for _, chunk := range chunks {
 		// 	chunk.Draw()
