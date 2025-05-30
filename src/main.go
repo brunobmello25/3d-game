@@ -23,10 +23,10 @@ func main() {
 	grassSideOverlayTexture = rl.LoadTexture("assets/blocks/grass_side_overlay.png")
 
 	camera := rl.NewCamera3D(
-		rl.NewVector3(32, 70, 32), // position
-		rl.NewVector3(0, 0, 0),    // target
-		rl.NewVector3(0, 1, 0),    // up
-		60,                        // fov
+		rl.NewVector3(8, 8, 8), // position
+		rl.NewVector3(0, 0, 0), // target
+		rl.NewVector3(0, 1, 0), // up
+		60,                     // fov
 		rl.CameraPerspective,
 	)
 
@@ -35,10 +35,10 @@ func main() {
 
 	// chunks := buildChunks()
 	block1 := NewBlock(BlockGrass)
-	position1 := rl.NewVector3(28, 65, 28)
+	position1 := rl.NewVector3(0, 0, 0)
 
 	block2 := NewBlock(BlockStone)
-	position2 := rl.NewVector3(50, 65, 28)
+	position2 := rl.NewVector3(1, 0, 1)
 
 	for !rl.WindowShouldClose() {
 		UpdateCamera(&camera)

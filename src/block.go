@@ -75,9 +75,9 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 	// TODO: this probably should be in the block struct... maybe?
 	// or maybe not, fuck it
-	width := float32(5.0)
-	height := float32(5.0)
-	length := float32(5.0)
+	width := float32(1.0)
+	height := float32(1.0)
+	length := float32(1.0)
 
 	rl.Begin(rl.Quads)
 
