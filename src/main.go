@@ -23,8 +23,11 @@ func main() {
 	grassSideOverlayTexture = rl.LoadTexture("assets/blocks/grass_side_overlay.png")
 
 	camera := rl.NewCamera3D(
-		rl.NewVector3(8, 8, 8), // position
-		rl.NewVector3(0, 0, 0), // target
+		// target needs to be a different value then position.
+		// probably should just set it to 1 block in front after
+		// we abstract this camera into a player controller
+		rl.NewVector3(0, 0, 0), // position
+		rl.NewVector3(1, 0, 0), // target
 		rl.NewVector3(0, 1, 0), // up
 		60,                     // fov
 		rl.CameraPerspective,
@@ -70,9 +73,7 @@ func buildChunks() []*Chunk {
 	chunks := []*Chunk{}
 
 	for x := range width {
-		fmt.Println("x:", x)
 		for z := range depth {
-			fmt.Println("x:", x)
 			chunk := NewChunk(x, 0, z)
 			chunks = append(chunks, chunk)
 		}
