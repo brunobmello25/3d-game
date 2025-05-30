@@ -97,7 +97,7 @@ func drawFPS(screenW int32) {
 }
 
 func drawPosition(position rl.Vector3) {
-	text := fmt.Sprintf("Position: %.1f, %.1f, %.1f", position.X, position.Y, position.Z)
+	text := fmt.Sprintf("Position: %.1f, %.1f, %.1f", position.X/GLOBAL_SCALE, position.Y/GLOBAL_SCALE, position.Z/GLOBAL_SCALE)
 	fontSize := int32(20)
 
 	// Draw position in the top-left corner with padding

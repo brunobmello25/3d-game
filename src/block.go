@@ -67,19 +67,14 @@ func (b *Block) GetColor() rl.Color {
 }
 
 func (b *Block) Draw(pos rl.Vector3) {
-	// rl.DrawCube(pos, 1, 1, 1, b.GetColor())
-	// rl.DrawCubeWires(pos, 1, 1, 1, rl.Black)
-
 	// TODO: this probably should be in the block struct... maybe?
 	// or maybe not, fuck it
-	width := float32(1.0)
-	height := float32(1.0)
-	length := float32(1.0)
+	dimensions := rl.NewVector3(GLOBAL_SCALE, GLOBAL_SCALE, GLOBAL_SCALE)
 
 	// Convert logical coordinates to world coordinates
-	x := pos.X * width
-	y := pos.Y * height
-	z := pos.Z * length
+	x := pos.X * dimensions.X
+	y := pos.Y * dimensions.Y
+	z := pos.Z * dimensions.Z
 
 	rl.Begin(rl.Quads)
 
@@ -92,13 +87,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 	rl.Normal3f(0.0, 1.0, 0.0) // Normal Pointing Up
 	rl.TexCoord2f(0.0, 1.0)
-	rl.Vertex3f(x-width/2, y+height/2, z-length/2) // Top Left Of The Texture and Quad.
+	rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Left Of The Texture and Quad.
 	rl.TexCoord2f(0.0, 0.0)
-	rl.Vertex3f(x-width/2, y+height/2, z+length/2) // Bottom Left Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Bottom Left Of The Texture and Quad
 	rl.TexCoord2f(1.0, 0.0)
-	rl.Vertex3f(x+width/2, y+height/2, z+length/2) // Bottom Right Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Bottom Right Of The Texture and Quad
 	rl.TexCoord2f(1.0, 1.0)
-	rl.Vertex3f(x+width/2, y+height/2, z-length/2) // Top Right Of The Texture and Quad Bottom Face
+	rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Right Of The Texture and Quad Bottom Face
 
 	// ===================================
 	// ========== Bottom Face ============
@@ -109,13 +104,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 	rl.Normal3f(0.0, -1.0, 0.0) // Normal Pointing Down
 	rl.TexCoord2f(1.0, 1.0)
-	rl.Vertex3f(x-width/2, y-height/2, z-length/2) // Top Right Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Top Right Of The Texture and Quad
 	rl.TexCoord2f(0.0, 1.0)
-	rl.Vertex3f(x+width/2, y-height/2, z-length/2) // Top Left Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Top Left Of The Texture and Quad
 	rl.TexCoord2f(0.0, 0.0)
-	rl.Vertex3f(x+width/2, y-height/2, z+length/2) // Bottom Left Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Left Of The Texture and Quad
 	rl.TexCoord2f(1.0, 0.0)
-	rl.Vertex3f(x-width/2, y-height/2, z+length/2) // Bottom Right Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Right Of The Texture and Quad
 
 	// ===================================
 	// ========== Front Face =============
@@ -126,13 +121,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 	rl.Normal3f(0.0, 0.0, 1.0) // Normal Pointing Towards Viewer
 	rl.TexCoord2f(0.0, 1.0)
-	rl.Vertex3f(x-width/2, y-height/2, z+length/2) // Bottom Left Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Left Of The Texture and Quad
 	rl.TexCoord2f(1.0, 1.0)
-	rl.Vertex3f(x+width/2, y-height/2, z+length/2) // Bottom Right Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Right Of The Texture and Quad
 	rl.TexCoord2f(1.0, 0.0)
-	rl.Vertex3f(x+width/2, y+height/2, z+length/2) // Top Right Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Top Right Of The Texture and Quad
 	rl.TexCoord2f(0.0, 0.0)
-	rl.Vertex3f(x-width/2, y+height/2, z+length/2) // Top Left Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Top Left Of The Texture and Quad
 
 	if b.Textures[2].overlayTexture.ID != 0 {
 		// ===================================
@@ -144,13 +139,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 		rl.Normal3f(0.0, 0.0, 1.0) // Normal Pointing Towards Viewer
 		rl.TexCoord2f(0.0, 1.0)
-		rl.Vertex3f(x-width/2, y-height/2, z+length/2) // Bottom Left Of The Texture and Quad
+		rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Left Of The Texture and Quad
 		rl.TexCoord2f(1.0, 1.0)
-		rl.Vertex3f(x+width/2, y-height/2, z+length/2) // Bottom Right Of The Texture and Quad
+		rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Right Of The Texture and Quad
 		rl.TexCoord2f(1.0, 0.0)
-		rl.Vertex3f(x+width/2, y+height/2, z+length/2) // Top Right Of The Texture and Quad
+		rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Top Right Of The Texture and Quad
 		rl.TexCoord2f(0.0, 0.0)
-		rl.Vertex3f(x-width/2, y+height/2, z+length/2) // Top Left Of The Texture and Quad
+		rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Top Left Of The Texture and Quad
 	}
 
 	// ===================================
@@ -162,13 +157,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 	rl.Normal3f(1.0, 0.0, 0.0) // Normal Pointing Right
 	rl.TexCoord2f(1.0, 1.0)
-	rl.Vertex3f(x+width/2, y-height/2, z-length/2) // Bottom Right Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Bottom Right Of The Texture and Quad
 	rl.TexCoord2f(1.0, 0.0)
-	rl.Vertex3f(x+width/2, y+height/2, z-length/2) // Top Right Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Right Of The Texture and Quad
 	rl.TexCoord2f(0.0, 0.0)
-	rl.Vertex3f(x+width/2, y+height/2, z+length/2) // Top Left Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Top Left Of The Texture and Quad
 	rl.TexCoord2f(0.0, 1.0)
-	rl.Vertex3f(x+width/2, y-height/2, z+length/2) // Bottom Left Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Left Of The Texture and Quad
 
 	if b.Textures[3].overlayTexture.ID != 0 {
 		// ====================================
@@ -180,13 +175,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 		rl.Normal3f(1.0, 0.0, 0.0) // Normal Pointing Right
 		rl.TexCoord2f(1.0, 1.0)
-		rl.Vertex3f(x+width/2, y-height/2, z-length/2) // Bottom Right Of The Texture and Quad
+		rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Bottom Right Of The Texture and Quad
 		rl.TexCoord2f(1.0, 0.0)
-		rl.Vertex3f(x+width/2, y+height/2, z-length/2) // Top Right Of The Texture and Quad
+		rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Right Of The Texture and Quad
 		rl.TexCoord2f(0.0, 0.0)
-		rl.Vertex3f(x+width/2, y+height/2, z+length/2) // Top Left Of The Texture and Quad
+		rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Top Left Of The Texture and Quad
 		rl.TexCoord2f(0.0, 1.0)
-		rl.Vertex3f(x+width/2, y-height/2, z+length/2) // Bottom Left Of The Texture and Quad
+		rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Left Of The Texture and Quad
 	}
 
 	// ===================================
@@ -198,13 +193,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 	rl.Normal3f(0.0, 0.0, -1.0) // Normal Pointing Away From Viewer
 	rl.TexCoord2f(1.0, 1.0)
-	rl.Vertex3f(x-width/2, y-height/2, z-length/2) // Bottom Right Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Bottom Right Of The Texture and Quad
 	rl.TexCoord2f(1.0, 0.0)
-	rl.Vertex3f(x-width/2, y+height/2, z-length/2) // Top Right Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Right Of The Texture and Quad
 	rl.TexCoord2f(0.0, 0.0)
-	rl.Vertex3f(x+width/2, y+height/2, z-length/2) // Top Left Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Left Of The Texture and Quad
 	rl.TexCoord2f(0.0, 1.0)
-	rl.Vertex3f(x+width/2, y-height/2, z-length/2) // Bottom Left Of The Texture and Quad
+	rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Bottom Left Of The Texture and Quad
 
 	if b.Textures[4].overlayTexture.ID != 0 {
 		// ====================================
@@ -216,13 +211,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 		rl.Normal3f(0.0, 0.0, -1.0) // Normal Pointing Away From Viewer
 		rl.TexCoord2f(1.0, 1.0)
-		rl.Vertex3f(x-width/2, y-height/2, z-length/2) // Bottom Right Of The Texture and Quad
+		rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Bottom Right Of The Texture and Quad
 		rl.TexCoord2f(1.0, 0.0)
-		rl.Vertex3f(x-width/2, y+height/2, z-length/2) // Top Right Of The Texture and Quad
+		rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Right Of The Texture and Quad
 		rl.TexCoord2f(0.0, 0.0)
-		rl.Vertex3f(x+width/2, y+height/2, z-length/2) // Top Left Of The Texture and Quad
+		rl.Vertex3f(x+dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Left Of The Texture and Quad
 		rl.TexCoord2f(0.0, 1.0)
-		rl.Vertex3f(x+width/2, y-height/2, z-length/2) // Bottom Left Of The Texture and Quad
+		rl.Vertex3f(x+dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Bottom Left Of The Texture and Quad
 	}
 
 	// ===================================
@@ -234,13 +229,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 	rl.Normal3f(-1.0, 0.0, 0.0) // Normal Pointing Left
 	rl.TexCoord2f(0.0, 1.0)
-	rl.Vertex3f(x-width/2, y-height/2, z-length/2) // Bottom Left Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Bottom Left Of The Texture and Quad
 	rl.TexCoord2f(1.0, 1.0)
-	rl.Vertex3f(x-width/2, y-height/2, z+length/2) // Bottom Right Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Right Of The Texture and Quad
 	rl.TexCoord2f(1.0, 0.0)
-	rl.Vertex3f(x-width/2, y+height/2, z+length/2) // Top Right Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Top Right Of The Texture and Quad
 	rl.TexCoord2f(0.0, 0.0)
-	rl.Vertex3f(x-width/2, y+height/2, z-length/2) // Top Left Of The Texture and Quad
+	rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Left Of The Texture and Quad
 
 	if b.Textures[5].overlayTexture.ID != 0 {
 		// ====================================
@@ -252,13 +247,13 @@ func (b *Block) Draw(pos rl.Vector3) {
 
 		rl.Normal3f(-1.0, 0.0, 0.0) // Normal Pointing Left
 		rl.TexCoord2f(0.0, 1.0)
-		rl.Vertex3f(x-width/2, y-height/2, z-length/2) // Bottom Left Of The Texture and Quad
+		rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z-dimensions.Z/2) // Bottom Left Of The Texture and Quad
 		rl.TexCoord2f(1.0, 1.0)
-		rl.Vertex3f(x-width/2, y-height/2, z+length/2) // Bottom Right Of The Texture and Quad
+		rl.Vertex3f(x-dimensions.X/2, y-dimensions.Y/2, z+dimensions.Z/2) // Bottom Right Of The Texture and Quad
 		rl.TexCoord2f(1.0, 0.0)
-		rl.Vertex3f(x-width/2, y+height/2, z+length/2) // Top Right Of The Texture and Quad
+		rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z+dimensions.Z/2) // Top Right Of The Texture and Quad
 		rl.TexCoord2f(0.0, 0.0)
-		rl.Vertex3f(x-width/2, y+height/2, z-length/2) // Top Left Of The Texture and Quad
+		rl.Vertex3f(x-dimensions.X/2, y+dimensions.Y/2, z-dimensions.Z/2) // Top Left Of The Texture and Quad
 	}
 
 	rl.End()

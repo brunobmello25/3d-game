@@ -1,6 +1,8 @@
 package main
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 type Chunk struct {
 	X, Y, Z              int
@@ -61,7 +63,8 @@ func (c *Chunk) Draw() {
 				block := c.blocks[c.idx(x, y, z)]
 				// TODO: shouldn't store air blocks
 				if block.Type != BlockAir {
-					pos := rl.NewVector3(float32(c.X*c.width+x), float32(c.Y+c.height+y), float32(c.Z*c.depth+z))
+					blockX, blockY, blockZ := float32(c.X*c.width+x), float32(c.Y*c.height+y), float32(c.Z*c.depth+z)
+					pos := rl.NewVector3(blockX, blockY, blockZ)
 					block.Draw(pos)
 				}
 			}
