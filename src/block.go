@@ -46,6 +46,8 @@ func NewBlock(blockType BlockType) *Block {
 			block.Textures[i] = NewBlockTextureWithOverlay(dirtTexture, rl.Brown, grassSideOverlayTexture, rl.DarkGreen)
 		}
 		return block
+	case BlockAir:
+		return block
 	}
 
 	panic(fmt.Sprintf("Unknown block type: %d", blockType))
@@ -67,6 +69,10 @@ func (b *Block) GetColor() rl.Color {
 }
 
 func (b *Block) Draw(pos rl.Vector3) {
+	if b.Type == BlockAir {
+		return
+	}
+
 	// TODO: this probably should be in the block struct... maybe?
 	// or maybe not, fuck it
 	dimensions := rl.NewVector3(GLOBAL_SCALE, GLOBAL_SCALE, GLOBAL_SCALE)

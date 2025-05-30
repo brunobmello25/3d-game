@@ -11,7 +11,7 @@ type Chunk struct {
 }
 
 func NewChunk(x, y, z int) *Chunk {
-	width, height, depth := CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE
+	width, height, depth := CHUNK_SIZE, CHUNK_SIZE*CHUNK_SIZE, CHUNK_SIZE
 
 	c := &Chunk{
 		width:  width,
