@@ -9,7 +9,8 @@ type Chunk struct {
 }
 
 func NewChunk(x, y, z int) *Chunk {
-	width, height, depth := 16, 16, 16
+	width, height, depth := CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE
+
 	c := &Chunk{
 		width:  width,
 		height: height,

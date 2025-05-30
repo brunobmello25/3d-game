@@ -69,15 +69,17 @@ func (b *Block) GetColor() rl.Color {
 func (b *Block) Draw(pos rl.Vector3) {
 	// rl.DrawCube(pos, 1, 1, 1, b.GetColor())
 	// rl.DrawCubeWires(pos, 1, 1, 1, rl.Black)
-	x := pos.X
-	y := pos.Y
-	z := pos.Z
 
 	// TODO: this probably should be in the block struct... maybe?
 	// or maybe not, fuck it
 	width := float32(1.0)
 	height := float32(1.0)
 	length := float32(1.0)
+
+	// Convert logical coordinates to world coordinates
+	x := pos.X * width
+	y := pos.Y * height
+	z := pos.Z * length
 
 	rl.Begin(rl.Quads)
 

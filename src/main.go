@@ -33,12 +33,7 @@ func main() {
 	rl.DisableCursor()
 	rl.SetTargetFPS(60)
 
-	// chunks := buildChunks()
-	block1 := NewBlock(BlockGrass)
-	position1 := rl.NewVector3(0, 0, 0)
-
-	block2 := NewBlock(BlockStone)
-	position2 := rl.NewVector3(1, 0, 1)
+	chunks := buildChunks()
 
 	for !rl.WindowShouldClose() {
 		UpdateCamera(&camera)
@@ -49,16 +44,14 @@ func main() {
 
 		rl.BeginMode3D(camera)
 
-		block1.Draw(position1)
-		block2.Draw(position2)
-
-		// for _, chunk := range chunks {
-		// 	chunk.Draw()
-		// }
+		for _, chunk := range chunks {
+			chunk.Draw()
+		}
 
 		rl.EndMode3D()
 
 		drawFPS(screenWidth)
+		drawPosition(camera.Position)
 
 		rl.EndDrawing()
 	}
@@ -77,7 +70,9 @@ func buildChunks() []*Chunk {
 	chunks := []*Chunk{}
 
 	for x := range width {
+		fmt.Println("x:", x)
 		for z := range depth {
+			fmt.Println("x:", x)
 			chunk := NewChunk(x, 0, z)
 			chunks = append(chunks, chunk)
 		}
@@ -96,6 +91,17 @@ func drawFPS(screenW int32) {
 
 	// draw it with a little padding from the edges:
 	x := screenW - textWidth - 10
+	y := int32(10)
+
+	rl.DrawText(text, x, y, fontSize, rl.Black)
+}
+
+func drawPosition(position rl.Vector3) {
+	text := fmt.Sprintf("Position: %.1f, %.1f, %.1f", position.X, position.Y, position.Z)
+	fontSize := int32(20)
+
+	// Draw position in the top-left corner with padding
+	x := int32(10)
 	y := int32(10)
 
 	rl.DrawText(text, x, y, fontSize, rl.Black)
