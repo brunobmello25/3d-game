@@ -58,6 +58,7 @@ func (c *Chunk) Draw() {
 		for y := range c.height {
 			for z := range c.depth {
 				block := c.blocks[c.idx(x, y, z)]
+				// TODO: shouldn't store air blocks
 				if block.Type != BlockAir {
 					pos := rl.NewVector3(float32(c.X*c.width+x), float32(c.Y+c.height+y), float32(c.Z*c.depth+z))
 					block.Draw(pos)

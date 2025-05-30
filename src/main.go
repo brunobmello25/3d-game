@@ -6,9 +6,21 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+var (
+	stoneTexture            rl.Texture2D
+	dirtTexture             rl.Texture2D
+	grassTopTexture         rl.Texture2D
+	grassSideOverlayTexture rl.Texture2D
+)
+
 func main() {
 	screenWidth, screenHeight := int32(1200), int32(675)
 	rl.InitWindow(screenWidth, screenHeight, "Minecraft Clone")
+
+	stoneTexture = rl.LoadTexture("assets/blocks/stone.png")
+	dirtTexture = rl.LoadTexture("assets/blocks/dirt.png")
+	grassTopTexture = rl.LoadTexture("assets/blocks/grass_top.png")
+	grassSideOverlayTexture = rl.LoadTexture("assets/blocks/grass_side_overlay.png")
 
 	camera := rl.NewCamera3D(
 		rl.NewVector3(32, 70, 32), // position
@@ -21,7 +33,9 @@ func main() {
 	rl.DisableCursor()
 	rl.SetTargetFPS(60)
 
-	chunks := buildChunks()
+	// chunks := buildChunks()
+	block := NewBlock(BlockGrass)
+	position := rl.NewVector3(28, 65, 28)
 
 	for !rl.WindowShouldClose() {
 		UpdateCamera(&camera)
@@ -32,9 +46,11 @@ func main() {
 
 		rl.BeginMode3D(camera)
 
-		for _, chunk := range chunks {
-			chunk.Draw()
-		}
+		block.Draw(position)
+
+		// for _, chunk := range chunks {
+		// 	chunk.Draw()
+		// }
 
 		rl.EndMode3D()
 
@@ -43,11 +59,16 @@ func main() {
 		rl.EndDrawing()
 	}
 
+	rl.UnloadTexture(stoneTexture)
+	rl.UnloadTexture(dirtTexture)
+	rl.UnloadTexture(grassTopTexture)
+	rl.UnloadTexture(grassSideOverlayTexture)
+
 	rl.CloseWindow()
 }
 
 func buildChunks() []*Chunk {
-	width, depth := 5, 5
+	width, depth := 1, 1
 
 	chunks := []*Chunk{}
 
