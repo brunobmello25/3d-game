@@ -15,7 +15,7 @@ var (
 
 func main() {
 	screenWidth, screenHeight := int32(1200), int32(675)
-	rl.InitWindow(screenWidth, screenHeight, "Minecraft Clone")
+	rl.InitWindow(screenWidth, screenHeight, "MC Clone")
 
 	stoneTexture = rl.LoadTexture("assets/blocks/stone.png")
 	dirtTexture = rl.LoadTexture("assets/blocks/dirt.png")
