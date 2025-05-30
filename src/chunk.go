@@ -29,9 +29,9 @@ func NewChunk(x, y, z int) *Chunk {
 				blockType := BlockAir
 				if y == 0 {
 					blockType = BlockStone
-				} else if y > 0 && y <= 10 {
+				} else if y > 0 && y <= 20 {
 					blockType = BlockDirt
-				} else if y > 10 && y < 20 {
+				} else if y == 21 {
 					blockType = BlockGrass
 				}
 				c.SetBlock(x, y, z, *NewBlock(blockType))

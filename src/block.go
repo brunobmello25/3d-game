@@ -17,7 +17,7 @@ const (
 
 type Block struct {
 	Type     BlockType
-	Textures [6]*BlockTexture // top, bottom, sides
+	Textures [6]*BlockTexture // top, bottom, front, right, back, left
 }
 
 func NewBlock(blockType BlockType) *Block {
