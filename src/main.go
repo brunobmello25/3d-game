@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	// "github.com/brunobmello25/3d-game/src/game"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -12,6 +13,11 @@ var (
 	grassTopTexture         rl.Texture2D
 	grassSideOverlayTexture rl.Texture2D
 )
+
+// func main() {
+// 	g := game.NewGame()
+// 	g.Run()
+// }
 
 func main() {
 	screenWidth, screenHeight := int32(1200), int32(675)
@@ -98,7 +104,7 @@ func drawFPS(screenW int32) {
 }
 
 func drawPosition(position rl.Vector3) {
-	text := fmt.Sprintf("Position: %.1f, %.1f, %.1f", position.X/GLOBAL_SCALE, position.Y/GLOBAL_SCALE, position.Z/GLOBAL_SCALE)
+	text := fmt.Sprintf("Position: %.1f, %.1f, %.1f", position.X, position.Y, position.Z)
 	fontSize := int32(20)
 
 	// Draw position in the top-left corner with padding
