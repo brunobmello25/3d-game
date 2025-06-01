@@ -2,41 +2,45 @@ package game
 
 import (
 	"github.com/brunobmello25/3d-game/src/player"
-	"github.com/brunobmello25/3d-game/src/render"
+	texture_manager "github.com/brunobmello25/3d-game/src/texture"
+	"github.com/brunobmello25/3d-game/src/ui"
+	"github.com/brunobmello25/3d-game/src/utils"
+	"github.com/brunobmello25/3d-game/src/world"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Game struct {
-	renderer *render.Renderer
-	player   *player.Player
+	ui               *ui.UI
+	player           *player.Player
+	world            *world.World
+	screenDimensions utils.Dimensions
 }
 
 func NewGame() *Game {
+	screenDimensions := utils.NewDimensions(1200, 675)
+
+	rl.InitWindow(int32(screenDimensions.X), int32(screenDimensions.Y), "MC Clone")
+
+	texture_manager.Init()
+
 	return &Game{
-		player: player.NewPlayer(),
-		// world:    world.NewWorld(),
-		renderer: render.NewRenderer(),
+		player:           player.NewPlayer(),
+		world:            world.NewWorld(),
+		ui:               ui.NewUI(),
+		screenDimensions: screenDimensions,
 	}
 }
 
 func (g *Game) Run() error {
-	screenWidth, screenHeight := int32(1200), int32(675)
-	rl.InitWindow(screenWidth, screenHeight, "MC Clone")
-
-	g.renderer.InitTextures()
-	// TODO: init player
-	// TODO: init world
-	// TODO: set world renderer
 
 	rl.DisableCursor()
 	rl.SetTargetFPS(60)
 
 	for !rl.WindowShouldClose() {
 		g.Update()
-		g.Render(screenWidth, screenHeight)
+		g.Render()
 	}
 
-	g.renderer.Cleanup()
 	rl.CloseWindow()
 	return nil
 }
@@ -45,16 +49,18 @@ func (g *Game) Update() {
 	g.player.Update()
 }
 
-func (g *Game) Render(screenWidth, screenHeight int32) {
+func (g *Game) Render() {
 	rl.BeginDrawing()
 	rl.ClearBackground(rl.RayWhite)
 
 	rl.BeginMode3D(g.player.Camera)
-	// TODO: world render
+
+	g.world.Draw()
+
 	rl.EndMode3D()
 
-	g.renderer.DrawFPS(screenWidth)
-	g.renderer.DrawPosition(g.player.Position)
+	g.ui.DrawFPS(int32(g.screenDimensions.X))
+	g.ui.DrawPosition(g.player.Position)
 
 	rl.EndDrawing()
 }

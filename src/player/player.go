@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	PLAYER_SPEED      = 0.1
-	MOUSE_SENSITIVITY = 0.1
+	PLAYER_SPEED      = 0.18
+	MOUSE_SENSITIVITY = 0.006
 )
 
 type Player struct {
@@ -75,3 +75,42 @@ func (p *Player) Update() {
 	p.Camera.Position = p.Position
 	p.Camera.Target = rl.Vector3Add(p.Position, forward)
 }
+
+// TODO: remove this after refactor is done
+// func UpdateCamera(camera *rl.Camera) {
+// 	var mousePositionDelta = rl.GetMouseDelta()
+//
+// 	var moveInWorldPlane uint8
+// 	moveInWorldPlane = 1
+//
+// 	var rotateAroundTarget uint8
+//
+// 	var lockView uint8
+// 	lockView = 1
+//
+// 	var rotateUp uint8
+//
+// 	rl.CameraYaw(camera, -mousePositionDelta.X*MOUSE_SENSITIVITY, rotateAroundTarget)
+// 	rl.CameraPitch(camera, -mousePositionDelta.Y*MOUSE_SENSITIVITY, lockView, rotateAroundTarget, rotateUp)
+//
+// 	// Keyboard support
+// 	if rl.IsKeyDown(rl.KeyW) {
+// 		rl.CameraMoveForward(camera, CAMERA_SPEED, moveInWorldPlane)
+// 	}
+// 	if rl.IsKeyDown(rl.KeyA) {
+// 		rl.CameraMoveRight(camera, -CAMERA_SPEED, moveInWorldPlane)
+// 	}
+// 	if rl.IsKeyDown(rl.KeyS) {
+// 		rl.CameraMoveForward(camera, -CAMERA_SPEED, moveInWorldPlane)
+// 	}
+// 	if rl.IsKeyDown(rl.KeyD) {
+// 		rl.CameraMoveRight(camera, CAMERA_SPEED, moveInWorldPlane)
+// 	}
+// 	if rl.IsKeyDown(rl.KeySpace) {
+// 		rl.CameraMoveUp(camera, CAMERA_SPEED)
+// 	}
+// 	if rl.IsKeyDown(rl.KeyLeftShift) {
+// 		rl.CameraMoveUp(camera, -CAMERA_SPEED)
+// 	}
+//
+// }
