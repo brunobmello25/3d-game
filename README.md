@@ -1,3 +1,3 @@
-# 3D Game
+# Minecraft Clone
 
-This is a 3D game project without using a fully fledged game engine like Unity or Godot. I don't know what I'm doing just yet but I plan to figure it out as I go.
+This is a (yet another) Minecraft Clone project, made with golang and raylib for learning purposes. I'm working on this to figure out some basic optimization techniques like meshing and face culling, and also figure out a bit more of 3D computer graphics.
