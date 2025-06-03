@@ -1,6 +1,12 @@
 package block
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/brunobmello25/3d-game/src/texture"
+
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 type BlockType int
 
@@ -39,8 +45,21 @@ type Block struct {
 func NewBlock(blockType BlockType) Block {
 	visiblity := VisibilityFromType(blockType)
 
+	// TODO: remove this hardcoded texture
+	dirtTexture := texture.GetTexture(texture.TEXTURE_NAME_DIRT)
+
+	faces := [6]BlockFace{
+		{direction: "up", texture: dirtTexture},
+		{direction: "down", texture: dirtTexture},
+		{direction: "front", texture: dirtTexture},
+		{direction: "back", texture: dirtTexture},
+		{direction: "left", texture: dirtTexture},
+		{direction: "right", texture: dirtTexture},
+	}
+
 	return Block{
 		Type:       blockType,
 		Visibility: visiblity,
+		Faces:      faces,
 	}
 }
