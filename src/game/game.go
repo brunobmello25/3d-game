@@ -4,20 +4,17 @@ import (
 	"github.com/brunobmello25/3d-game/src/player"
 	texture_manager "github.com/brunobmello25/3d-game/src/texture"
 	"github.com/brunobmello25/3d-game/src/ui"
-	"github.com/brunobmello25/3d-game/src/utils"
-	"github.com/brunobmello25/3d-game/src/world"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Game struct {
 	ui               *ui.UI
 	player           *player.Player
-	world            *world.World
-	screenDimensions utils.Dimensions
+	screenDimensions rl.Vector2
 }
 
 func NewGame() *Game {
-	screenDimensions := utils.NewDimensions(1200, 675)
+	screenDimensions := rl.NewVector2(1200, 675)
 
 	rl.InitWindow(int32(screenDimensions.X), int32(screenDimensions.Y), "MC Clone")
 
@@ -25,7 +22,6 @@ func NewGame() *Game {
 
 	return &Game{
 		player:           player.NewPlayer(),
-		world:            world.NewWorld(),
 		ui:               ui.NewUI(),
 		screenDimensions: screenDimensions,
 	}
@@ -54,8 +50,6 @@ func (g *Game) Render() {
 	rl.ClearBackground(rl.RayWhite)
 
 	rl.BeginMode3D(g.player.Camera)
-
-	g.world.Draw()
 
 	rl.EndMode3D()
 
