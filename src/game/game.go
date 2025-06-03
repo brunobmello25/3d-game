@@ -51,8 +51,8 @@ func (g *Game) Render() {
 
 	rl.BeginMode3D(g.player.Camera)
 
-	rl.DrawCube(rl.NewVector3(10, 10, 10), 1, 1, 1, rl.Blue)
-	rl.DrawCubeWires(rl.NewVector3(10, 10, 10), 1, 1, 1, rl.Black)
+	rl.DrawCube(rl.NewVector3(10, 1, 1), 1, 1, 1, rl.Blue)
+	rl.DrawCubeWires(rl.NewVector3(10, 1, 1), 1, 1, 1, rl.Black)
 
 	rl.EndMode3D()
 
