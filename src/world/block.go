@@ -7,6 +7,36 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+type BlockVisibility int
+
+func BlockVisibilityFromType(blockType BlockType) BlockVisibility {
+	switch blockType {
+	case BlockAir:
+		return BlockVisibilityEmpty
+	case BlockStone, BlockDirt, BlockGrass:
+		return BlockVisibilityOpaque
+	}
+	panic(fmt.Sprintf("Unknown block type for visibility: %d", blockType))
+}
+
+func (bv BlockVisibility) IsEmpty() bool {
+	return bv == BlockVisibilityEmpty
+}
+
+func (bv BlockVisibility) IsTransparent() bool {
+	return bv == BlockVisibilityTransparent
+}
+
+func (bv BlockVisibility) IsOpaque() bool {
+	return bv == BlockVisibilityOpaque
+}
+
+const (
+	BlockVisibilityEmpty       BlockVisibility = iota // no block, usually air
+	BlockVisibilityTransparent                        // glass, leaves, etc
+	BlockVisibilityOpaque                             // solid blocks like stone, dirt, grass, etc
+)
+
 type BlockType int
 
 const (
@@ -17,13 +47,16 @@ const (
 )
 
 type Block struct {
-	Type  BlockType
-	Faces [6]*Face // top, bottom, front, right, back, left
+	Type       BlockType
+	Visibility BlockVisibility
+	Faces      [6]Face // top, bottom, front, right, back, left
 }
 
-func NewBlock(blockType BlockType) *Block {
-	block := &Block{
-		Type: blockType,
+func NewBlock(blockType BlockType) Block {
+	visibility := BlockVisibilityFromType(blockType)
+	block := Block{
+		Type:       blockType,
+		Visibility: visibility,
 	}
 
 	switch blockType {
@@ -73,7 +106,7 @@ func NewBlock(blockType BlockType) *Block {
 }
 
 func (b *Block) Draw(pos rl.Vector3) {
-	if b.Type == BlockAir {
+	if b.Visibility.IsEmpty() {
 		return
 	}
 

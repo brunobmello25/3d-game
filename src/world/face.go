@@ -100,8 +100,8 @@ var faceVertexData = map[rl.Vector3]VertexData{
 	},
 }
 
-func NewFace(blockPosition rl.Vector3, texture FaceTexture, facing string) *Face {
-	return &Face{
+func NewFace(blockPosition rl.Vector3, texture FaceTexture, facing string) Face {
+	return Face{
 		Position: blockPosition,
 		Texture:  texture,
 		Normal:   normalFromFacing(facing),
