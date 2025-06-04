@@ -19,8 +19,8 @@ func NewPlayer() *Player {
 	return &Player{
 		Camera: rl.NewCamera3D(
 			position,
-			rl.NewVector3(1, 0, 0), // target
-			rl.NewVector3(0, 1, 0), // up
+			rl.NewVector3(0, 0, -1), // target
+			rl.NewVector3(0, 1, 0),  // up
 			60,
 			rl.CameraPerspective,
 		),
