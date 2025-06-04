@@ -39,10 +39,7 @@ func NewGame() *Game {
 
 	for _, b := range testBlocks {
 		blockCenter := b.position
-		for _, face := range b.block.Faces {
-
-			meshBuilder.AddFace(face, blockCenter)
-		}
+		meshBuilder.AddFaces(b.block.Faces[:], blockCenter)
 	}
 
 	testMesh := meshBuilder.Build()

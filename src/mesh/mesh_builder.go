@@ -25,6 +25,12 @@ func NewMeshBuilder() *MeshBuilder {
 	}
 }
 
+func (mb *MeshBuilder) AddFaces(face []block.BlockFace, faceCenter rl.Vector3) {
+	for _, f := range face {
+		mb.AddFace(f, faceCenter)
+	}
+}
+
 func (mb *MeshBuilder) AddFace(face block.BlockFace, faceCenter rl.Vector3) {
 	// Add vertices
 	mb.vertices = append(mb.vertices, face.GetVertexCoords(faceCenter)...)
