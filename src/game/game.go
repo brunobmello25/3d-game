@@ -25,28 +25,25 @@ func NewGame() *Game {
 	texture.Init()
 	texture.InitAtlas() // Initialize the texture atlas
 
+	testBlocks := []struct {
+		position rl.Vector3
+		block    block.Block
+	}{
+		{rl.NewVector3(-1, 0, -5), block.NewBlock(block.BlockTypeDirt)},
+		{rl.NewVector3(0, 0, -5), block.NewBlock(block.BlockTypeStone)},
+		{rl.NewVector3(1, 0, -5), block.NewBlock(block.BlockTypeDirt)},
+	}
+
 	// Create test mesh
 	meshBuilder := mesh.NewMeshBuilder()
 
-	blockCenter := rl.NewVector3(0, 0, 0)
+	for _, b := range testBlocks {
+		blockCenter := b.position
+		for _, face := range b.block.Faces {
 
-	frontFace := block.NewFace(block.FacingDirectionFront, texture.TEXTURE_NAME_DIRT)
-	meshBuilder.AddFace(frontFace, blockCenter)
-
-	rightFace := block.NewFace(block.FacingDirectionRight, texture.TEXTURE_NAME_DIRT)
-	meshBuilder.AddFace(rightFace, blockCenter)
-
-	leftFace := block.NewFace(block.FacingDirectionLeft, texture.TEXTURE_NAME_DIRT)
-	meshBuilder.AddFace(leftFace, blockCenter)
-
-	topFace := block.NewFace(block.FacingDirectionUp, texture.TEXTURE_NAME_DIRT)
-	meshBuilder.AddFace(topFace, blockCenter)
-
-	bottomFace := block.NewFace(block.FacingDirectionDown, texture.TEXTURE_NAME_DIRT)
-	meshBuilder.AddFace(bottomFace, blockCenter)
-
-	backFace := block.NewFace(block.FacingDirectionBack, texture.TEXTURE_NAME_DIRT)
-	meshBuilder.AddFace(backFace, blockCenter)
+			meshBuilder.AddFace(face, blockCenter)
+		}
+	}
 
 	testMesh := meshBuilder.Build()
 

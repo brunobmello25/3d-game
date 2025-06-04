@@ -52,7 +52,7 @@ func NewBlock(blockType BlockType) Block {
 	case BlockTypeDirt:
 		faces = dirtBlockFaces()
 	case BlockTypeGrass:
-		faces = dirtBlockFaces()
+		faces = grassBlockFaces()
 	default:
 		panic(fmt.Sprintf("unknown block type: %d", blockType))
 	}
@@ -66,24 +66,24 @@ func NewBlock(blockType BlockType) Block {
 
 func dirtBlockFaces() [6]BlockFace {
 	faces := [6]BlockFace{
-		{direction: FacingDirectionUp, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionDown, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionFront, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionBack, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionLeft, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionRight, textureName: texture.TEXTURE_NAME_DIRT},
+		NewFace(FacingDirectionUp, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionDown, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionFront, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionBack, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionLeft, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionRight, texture.TEXTURE_NAME_DIRT),
 	}
 	return faces
 }
 
 func stoneBlockFaces() [6]BlockFace {
 	faces := [6]BlockFace{
-		{direction: FacingDirectionUp, textureName: texture.TEXTURE_NAME_STONE},
-		{direction: FacingDirectionDown, textureName: texture.TEXTURE_NAME_STONE},
-		{direction: FacingDirectionFront, textureName: texture.TEXTURE_NAME_STONE},
-		{direction: FacingDirectionBack, textureName: texture.TEXTURE_NAME_STONE},
-		{direction: FacingDirectionLeft, textureName: texture.TEXTURE_NAME_STONE},
-		{direction: FacingDirectionRight, textureName: texture.TEXTURE_NAME_STONE},
+		NewFace(FacingDirectionUp, texture.TEXTURE_NAME_STONE),
+		NewFace(FacingDirectionDown, texture.TEXTURE_NAME_STONE),
+		NewFace(FacingDirectionFront, texture.TEXTURE_NAME_STONE),
+		NewFace(FacingDirectionBack, texture.TEXTURE_NAME_STONE),
+		NewFace(FacingDirectionLeft, texture.TEXTURE_NAME_STONE),
+		NewFace(FacingDirectionRight, texture.TEXTURE_NAME_STONE),
 	}
 	return faces
 }
@@ -91,12 +91,12 @@ func stoneBlockFaces() [6]BlockFace {
 func grassBlockFaces() [6]BlockFace {
 	// TODO: texture overlay
 	faces := [6]BlockFace{
-		{direction: FacingDirectionUp, textureName: texture.TEXTURE_NAME_GRASS_TOP},
-		{direction: FacingDirectionDown, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionFront, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionBack, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionLeft, textureName: texture.TEXTURE_NAME_DIRT},
-		{direction: FacingDirectionRight, textureName: texture.TEXTURE_NAME_DIRT},
+		NewFace(FacingDirectionUp, texture.TEXTURE_NAME_GRASS_TOP),
+		NewFace(FacingDirectionDown, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionFront, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionBack, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionLeft, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionRight, texture.TEXTURE_NAME_DIRT),
 	}
 	return faces
 }

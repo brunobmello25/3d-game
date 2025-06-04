@@ -80,9 +80,9 @@ func (n Normal) getUV() (rl.Vector3, rl.Vector3) {
 	case Normal(rl.NewVector3(-1, 0, 0)): // Left
 		return rl.NewVector3(0, 1, 0), rl.NewVector3(0, 0, -1)
 	case Normal(rl.NewVector3(0, 1, 0)): // Up
-		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, -1) // TODO: entender pq esse cara é negativo sendo que o produto deles supostamente tem que dar positivo
+		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, -1)
 	case Normal(rl.NewVector3(0, -1, 0)): // Down
-		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, 1) // TODO: e entender pq esse cara é positivo sendo que o produto deles supostamente tem que dar negativo
+		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, 1)
 	case Normal(rl.NewVector3(0, 0, 1)): // Front
 		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 1, 0)
 	case Normal(rl.NewVector3(0, 0, -1)): // Back

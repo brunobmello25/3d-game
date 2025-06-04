@@ -29,6 +29,8 @@ func InitAtlas() {
 	// For now, we'll just add the dirt texture as an example
 	// You'll want to add all your block textures here
 	addTextureToAtlas(TEXTURE_NAME_DIRT)
+	addTextureToAtlas(TEXTURE_NAME_STONE)
+	addTextureToAtlas(TEXTURE_NAME_GRASS_TOP) // TODO: figure out how to add tint to this
 }
 
 func addTextureToAtlas(textureName string) {
