@@ -30,9 +30,11 @@ func NewGame() *Game {
 
 	dirtBlockCenter := rl.NewVector3(0, 0, 0)
 
-	dirtFace := block.NewFace(block.FacingDirectionFront, dirtTexture)
+	frontFace := block.NewFace(block.FacingDirectionFront, dirtTexture)
+	rightFace := block.NewFace(block.FacingDirectionRight, dirtTexture)
 
-	meshBuilder.AddFace(dirtFace, dirtBlockCenter)
+	meshBuilder.AddFace(frontFace, dirtBlockCenter)
+	meshBuilder.AddFace(rightFace, dirtBlockCenter)
 	testMesh := meshBuilder.Build()
 
 	testModel := rl.LoadModelFromMesh(testMesh)

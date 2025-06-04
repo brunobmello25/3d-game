@@ -20,15 +20,18 @@ func NewFace(direction FacingDirection, texture rl.Texture2D) BlockFace {
 
 func (f BlockFace) GetVertexCoords(blockCenter rl.Vector3) []float32 {
 	faceNormal := f.direction.getNormal()
+	halfNormal := rl.Vector3Scale(faceNormal.ToVector3(), 0.5) // Half of the normal vector
 
-	faceCenter := rl.Vector3Add(blockCenter, rl.Vector3(faceNormal))
+	faceCenter := rl.Vector3Add(blockCenter, rl.Vector3(halfNormal))
 
 	u, v := faceNormal.getUV()
+	hu := rl.Vector3Scale(u, 0.5) // Half of the u vector
+	hv := rl.Vector3Scale(v, 0.5) // Half of the v vector
 
-	bl := rl.Vector3Subtract(rl.Vector3Subtract(faceCenter, u), v) // C - U - V
-	br := rl.Vector3Subtract(rl.Vector3Add(faceCenter, u), v)      // C + U - V
-	tr := rl.Vector3Add(rl.Vector3Add(faceCenter, u), v)           // C + U + V
-	tp := rl.Vector3Add(rl.Vector3Subtract(faceCenter, u), v)      // C - U + V
+	bl := rl.Vector3Subtract(rl.Vector3Subtract(faceCenter, hu), hv) // C - U - V
+	br := rl.Vector3Subtract(rl.Vector3Add(faceCenter, hu), hv)      // C + U - V
+	tr := rl.Vector3Add(rl.Vector3Add(faceCenter, hu), hv)           // C + U + V
+	tp := rl.Vector3Add(rl.Vector3Subtract(faceCenter, hu), hv)      // C - U + V
 
 	return []float32{
 		bl.X, bl.Y, bl.Z, // bottom-left
@@ -61,6 +64,10 @@ func (f BlockFace) GetTextureCoords() []float32 {
 }
 
 type Normal rl.Vector3
+
+func (n Normal) ToVector3() rl.Vector3 {
+	return rl.Vector3(n)
+}
 
 func (n Normal) getUV() (rl.Vector3, rl.Vector3) {
 	switch n {
