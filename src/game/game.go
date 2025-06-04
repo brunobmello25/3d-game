@@ -4,7 +4,7 @@ import (
 	"github.com/brunobmello25/3d-game/src/block"
 	"github.com/brunobmello25/3d-game/src/mesh"
 	"github.com/brunobmello25/3d-game/src/player"
-	texture_manager "github.com/brunobmello25/3d-game/src/texture"
+	texture "github.com/brunobmello25/3d-game/src/texture"
 	"github.com/brunobmello25/3d-game/src/ui"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -22,23 +22,36 @@ func NewGame() *Game {
 
 	rl.InitWindow(int32(screenDimensions.X), int32(screenDimensions.Y), "MC Clone")
 
-	texture_manager.Init()
+	texture.Init()
+	texture.InitAtlas() // Initialize the texture atlas
 
 	// Create test mesh
-	dirtTexture := texture_manager.GetTexture(texture_manager.TEXTURE_NAME_DIRT) // Assuming you have a dirt texture
 	meshBuilder := mesh.NewMeshBuilder()
 
-	dirtBlockCenter := rl.NewVector3(0, 0, 0)
+	blockCenter := rl.NewVector3(0, 0, 0)
 
-	frontFace := block.NewFace(block.FacingDirectionFront, dirtTexture)
-	rightFace := block.NewFace(block.FacingDirectionRight, dirtTexture)
+	frontFace := block.NewFace(block.FacingDirectionFront, texture.TEXTURE_NAME_DIRT)
+	meshBuilder.AddFace(frontFace, blockCenter)
 
-	meshBuilder.AddFace(frontFace, dirtBlockCenter)
-	meshBuilder.AddFace(rightFace, dirtBlockCenter)
+	rightFace := block.NewFace(block.FacingDirectionRight, texture.TEXTURE_NAME_DIRT)
+	meshBuilder.AddFace(rightFace, blockCenter)
+
+	leftFace := block.NewFace(block.FacingDirectionLeft, texture.TEXTURE_NAME_DIRT)
+	meshBuilder.AddFace(leftFace, blockCenter)
+
+	topFace := block.NewFace(block.FacingDirectionUp, texture.TEXTURE_NAME_DIRT)
+	meshBuilder.AddFace(topFace, blockCenter)
+
+	bottomFace := block.NewFace(block.FacingDirectionDown, texture.TEXTURE_NAME_DIRT)
+	meshBuilder.AddFace(bottomFace, blockCenter)
+
+	backFace := block.NewFace(block.FacingDirectionBack, texture.TEXTURE_NAME_DIRT)
+	meshBuilder.AddFace(backFace, blockCenter)
+
 	testMesh := meshBuilder.Build()
 
 	testModel := rl.LoadModelFromMesh(testMesh)
-	rl.SetMaterialTexture(testModel.Materials, rl.MapDiffuse, dirtTexture)
+	rl.SetMaterialTexture(testModel.Materials, rl.MapDiffuse, texture.GetAtlasTexture())
 
 	return &Game{
 		player:           player.NewPlayer(),

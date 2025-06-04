@@ -43,16 +43,18 @@ type Block struct {
 func NewBlock(blockType BlockType) Block {
 	visiblity := VisibilityFromType(blockType)
 
-	// TODO: remove this hardcoded texture
-	dirtTexture := texture.GetTexture(texture.TEXTURE_NAME_DIRT)
-
-	faces := [6]BlockFace{
-		{direction: "up", texture: dirtTexture},
-		{direction: "down", texture: dirtTexture},
-		{direction: "front", texture: dirtTexture},
-		{direction: "back", texture: dirtTexture},
-		{direction: "left", texture: dirtTexture},
-		{direction: "right", texture: dirtTexture},
+	var faces [6]BlockFace
+	switch blockType {
+	case BlockTypeAir:
+		faces = [6]BlockFace{} // Air block has no faces
+	case BlockTypeStone:
+		faces = stoneBlockFaces()
+	case BlockTypeDirt:
+		faces = dirtBlockFaces()
+	case BlockTypeGrass:
+		faces = dirtBlockFaces()
+	default:
+		panic(fmt.Sprintf("unknown block type: %d", blockType))
 	}
 
 	return Block{
@@ -60,4 +62,41 @@ func NewBlock(blockType BlockType) Block {
 		Visibility: visiblity,
 		Faces:      faces,
 	}
+}
+
+func dirtBlockFaces() [6]BlockFace {
+	faces := [6]BlockFace{
+		{direction: FacingDirectionUp, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionDown, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionFront, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionBack, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionLeft, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionRight, textureName: texture.TEXTURE_NAME_DIRT},
+	}
+	return faces
+}
+
+func stoneBlockFaces() [6]BlockFace {
+	faces := [6]BlockFace{
+		{direction: FacingDirectionUp, textureName: texture.TEXTURE_NAME_STONE},
+		{direction: FacingDirectionDown, textureName: texture.TEXTURE_NAME_STONE},
+		{direction: FacingDirectionFront, textureName: texture.TEXTURE_NAME_STONE},
+		{direction: FacingDirectionBack, textureName: texture.TEXTURE_NAME_STONE},
+		{direction: FacingDirectionLeft, textureName: texture.TEXTURE_NAME_STONE},
+		{direction: FacingDirectionRight, textureName: texture.TEXTURE_NAME_STONE},
+	}
+	return faces
+}
+
+func grassBlockFaces() [6]BlockFace {
+	// TODO: texture overlay
+	faces := [6]BlockFace{
+		{direction: FacingDirectionUp, textureName: texture.TEXTURE_NAME_GRASS_TOP},
+		{direction: FacingDirectionDown, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionFront, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionBack, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionLeft, textureName: texture.TEXTURE_NAME_DIRT},
+		{direction: FacingDirectionRight, textureName: texture.TEXTURE_NAME_DIRT},
+	}
+	return faces
 }

@@ -3,18 +3,19 @@ package block
 import (
 	"fmt"
 
+	"github.com/brunobmello25/3d-game/src/texture"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type BlockFace struct {
-	direction FacingDirection
-	texture   rl.Texture2D
+	direction   FacingDirection
+	textureName string
 }
 
-func NewFace(direction FacingDirection, texture rl.Texture2D) BlockFace {
+func NewFace(direction FacingDirection, textureName string) BlockFace {
 	return BlockFace{
-		direction: direction,
-		texture:   texture,
+		direction:   direction,
+		textureName: textureName,
 	}
 }
 
@@ -53,13 +54,16 @@ func (f BlockFace) GetVertexNormals(blockCenter rl.Vector3) []float32 {
 }
 
 func (f BlockFace) GetTextureCoords() []float32 {
+	// Get the UV coordinates from the texture atlas
+	uv := texture.GetTextureUV(f.textureName)
+
 	// Texture coordinates are defined in a counter clockwise
 	// manner starting from the bottom-left corner
 	return []float32{
-		0, 1, // bottom-left
-		1, 1, // bottom-right
-		1, 0, // top-right
-		0, 0, // top-left
+		uv.X, uv.Y + uv.Height, // bottom-left
+		uv.X + uv.Width, uv.Y + uv.Height, // bottom-right
+		uv.X + uv.Width, uv.Y, // top-right
+		uv.X, uv.Y, // top-left
 	}
 }
 
@@ -76,9 +80,9 @@ func (n Normal) getUV() (rl.Vector3, rl.Vector3) {
 	case Normal(rl.NewVector3(-1, 0, 0)): // Left
 		return rl.NewVector3(0, 1, 0), rl.NewVector3(0, 0, -1)
 	case Normal(rl.NewVector3(0, 1, 0)): // Up
-		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, 1)
+		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, -1) // TODO: entender pq esse cara é negativo sendo que o produto deles supostamente tem que dar positivo
 	case Normal(rl.NewVector3(0, -1, 0)): // Down
-		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, -1)
+		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, 1) // TODO: e entender pq esse cara é positivo sendo que o produto deles supostamente tem que dar negativo
 	case Normal(rl.NewVector3(0, 0, 1)): // Front
 		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 1, 0)
 	case Normal(rl.NewVector3(0, 0, -1)): // Back

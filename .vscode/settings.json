@@ -1,0 +1,10 @@
+{
+    "go.goroot": "/home/brubs/.local/share/mise/installs/go/1.24.2",
+    "debug.javascript.defaultRuntimeExecutable": {
+        "pwa-node": "/home/brubs/.local/share/mise/shims/node"
+    },
+    "go.alternateTools": {
+        "go": "/home/brubs/.local/share/mise/shims/go",
+        "gopls": "/home/brubs/.local/share/mise/shims/gopls"
+    }
+}
