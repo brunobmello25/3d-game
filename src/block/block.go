@@ -23,6 +23,10 @@ const (
 	BlockVisibilityOpaque
 )
 
+func (v BlockVisibility) IsEmpty() bool {
+	return v == BlockVisibilityEmpty
+}
+
 func VisibilityFromType(blockType BlockType) BlockVisibility {
 	switch blockType {
 	case BlockTypeAir:
