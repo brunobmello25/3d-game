@@ -8,19 +8,19 @@ import (
 )
 
 type BlockFace struct {
-	direction   FacingDirection
+	Direction   FacingDirection
 	textureName string
 }
 
 func NewFace(direction FacingDirection, textureName string) BlockFace {
 	return BlockFace{
-		direction:   direction,
+		Direction:   direction,
 		textureName: textureName,
 	}
 }
 
 func (f BlockFace) GetVertexCoords(blockCenter rl.Vector3) []float32 {
-	faceNormal := f.direction.getNormal()
+	faceNormal := f.Direction.GetNormal()
 	halfNormal := rl.Vector3Scale(faceNormal.ToVector3(), 0.5) // Half of the normal vector
 
 	faceCenter := rl.Vector3Add(blockCenter, rl.Vector3(halfNormal))
@@ -43,7 +43,7 @@ func (f BlockFace) GetVertexCoords(blockCenter rl.Vector3) []float32 {
 }
 
 func (f BlockFace) GetVertexNormals(blockCenter rl.Vector3) []float32 {
-	faceNormal := f.direction.getNormal()
+	faceNormal := f.Direction.GetNormal()
 
 	return []float32{
 		faceNormal.X, faceNormal.Y, faceNormal.Z, // bottom-left
@@ -76,9 +76,9 @@ func (n Normal) ToVector3() rl.Vector3 {
 func (n Normal) getUV() (rl.Vector3, rl.Vector3) {
 	switch n {
 	case Normal(rl.NewVector3(1, 0, 0)): // Right
-		return rl.NewVector3(0, 1, 0), rl.NewVector3(0, 0, 1)
+		return rl.NewVector3(0, 0, 1), rl.NewVector3(0, -1, 0)
 	case Normal(rl.NewVector3(-1, 0, 0)): // Left
-		return rl.NewVector3(0, 1, 0), rl.NewVector3(0, 0, -1)
+		return rl.NewVector3(0, 0, 1), rl.NewVector3(0, 1, 0)
 	case Normal(rl.NewVector3(0, 1, 0)): // Up
 		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 0, -1)
 	case Normal(rl.NewVector3(0, -1, 0)): // Down
@@ -86,7 +86,7 @@ func (n Normal) getUV() (rl.Vector3, rl.Vector3) {
 	case Normal(rl.NewVector3(0, 0, 1)): // Front
 		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, 1, 0)
 	case Normal(rl.NewVector3(0, 0, -1)): // Back
-		return rl.NewVector3(1, 0, 0), rl.NewVector3(0, -1, 0)
+		return rl.NewVector3(-1, 0, 0), rl.NewVector3(0, 1, 0)
 	}
 
 	panic(fmt.Sprintf("unknown normal vector: %v", n))
@@ -103,7 +103,7 @@ const (
 	FacingDirectionLeft  FacingDirection = "left"
 )
 
-func (fd FacingDirection) getNormal() Normal {
+func (fd FacingDirection) GetNormal() Normal {
 	switch fd {
 	case "up":
 		return Normal(rl.NewVector3(0, 1, 0))
