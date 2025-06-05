@@ -12,7 +12,7 @@ type Game struct {
 	ui               *ui.UI
 	player           *player.Player
 	screenDimensions rl.Vector2
-	testChunk        *chunk.Chunk
+	testChunks       []*chunk.Chunk
 }
 
 func NewGame() *Game {
@@ -27,8 +27,14 @@ func NewGame() *Game {
 		player:           player.NewPlayer(),
 		ui:               ui.NewUI(),
 		screenDimensions: screenDimensions,
-		testChunk:        chunk.NewChunk(rl.NewVector3(0, 0, 0)),
+		testChunks: []*chunk.Chunk{
+			chunk.NewChunk(rl.NewVector3(0, 0, 0)),
+			chunk.NewChunk(rl.NewVector3(1, 0, 0)),
+			chunk.NewChunk(rl.NewVector3(0, 0, 1)),
+			chunk.NewChunk(rl.NewVector3(1, 0, 1)),
+		},
 	}
+
 }
 
 func (g *Game) Run() error {
@@ -46,7 +52,9 @@ func (g *Game) Run() error {
 
 func (g *Game) Update() {
 	g.player.Update()
-	g.testChunk.Update()
+	for _, c := range g.testChunks {
+		c.Update()
+	}
 }
 
 func (g *Game) Render() {
@@ -55,7 +63,9 @@ func (g *Game) Render() {
 
 	rl.BeginMode3D(g.player.Camera)
 
-	g.testChunk.Render()
+	for _, c := range g.testChunks {
+		c.Render()
+	}
 
 	rl.EndMode3D()
 

@@ -25,8 +25,7 @@ func NewChunk(position rl.Vector3) *Chunk {
 	}
 
 	for i := range c.Blocks {
-		x, y, z := c.delinearize(i)
-		fmt.Println("Block position:", x, y, z)
+		_, y, _ := c.delinearize(i)
 
 		btype := block.BlockTypeAir // Default to air block
 
@@ -48,15 +47,12 @@ func NewChunk(position rl.Vector3) *Chunk {
 
 func (c *Chunk) Update() {
 	if c.dirty {
-		fmt.Println("===================")
-		fmt.Println("Rebuilding chunk mesh...")
-		fmt.Println("===================")
 		c.rebuildMesh()
 	}
 }
 
 func (c *Chunk) Render() {
-	rl.DrawModel(c.model, c.Position, 1.0, rl.White)
+	rl.DrawModel(c.model, rl.NewVector3(c.Position.X*CHUNK_SIZE, c.Position.Y*CHUNK_SIZE, c.Position.Z*CHUNK_SIZE), 1.0, rl.White)
 }
 
 func (c *Chunk) Cleanup() {
@@ -75,7 +71,6 @@ func (c *Chunk) rebuildMesh() {
 		x, y, z := c.delinearize(i)
 
 		localCoord := rl.NewVector3(float32(x), float32(y), float32(z))
-		globalCoord := c.toGlobalCoords(localCoord)
 
 		b := c.Blocks[i]
 
@@ -83,7 +78,7 @@ func (c *Chunk) rebuildMesh() {
 			for _, face := range b.Faces {
 				neighbor := c.getNeighbor(localCoord, face)
 				if neighbor == nil || neighbor.Visibility.IsEmpty() {
-					meshBuilder.AddFace(face, globalCoord)
+					meshBuilder.AddFace(face, localCoord)
 				}
 			}
 		}
@@ -112,14 +107,6 @@ func (c *Chunk) getNeighbor(currentCoord rl.Vector3, currentFace block.BlockFace
 
 	neighborIndex := c.linearize(int(neighborCoord.X), int(neighborCoord.Y), int(neighborCoord.Z))
 	return &c.Blocks[neighborIndex]
-}
-
-func (c *Chunk) toGlobalCoords(coords rl.Vector3) rl.Vector3 {
-	return rl.NewVector3(
-		c.Position.X*CHUNK_SIZE+coords.X,
-		c.Position.Y*CHUNK_SIZE+coords.Y,
-		c.Position.Z*CHUNK_SIZE+coords.Z,
-	)
 }
 
 func (c *Chunk) delinearize(index int) (int, int, int) {
