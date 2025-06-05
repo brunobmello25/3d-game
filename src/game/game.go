@@ -8,11 +8,13 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+const GRID_SIZE = 5 // 5x5 grid of chunk columns
+
 type Game struct {
 	ui               *ui.UI
 	player           *player.Player
 	screenDimensions rl.Vector2
-	testColumn       *chunk.ChunkColumn
+	chunkGrid        [GRID_SIZE][GRID_SIZE]*chunk.ChunkColumn
 }
 
 func NewGame() *Game {
@@ -23,16 +25,27 @@ func NewGame() *Game {
 	texture.Init()
 	texture.InitAtlas() // Initialize the texture atlas
 
-	testColumn := chunk.NewChunkColumn(0, 0)
-	testColumn.Generate()
+	// Create and initialize the 5x5 grid of chunk columns
+	var chunkGrid [GRID_SIZE][GRID_SIZE]*chunk.ChunkColumn
+
+	// Generate chunks centered around origin (offset by half the grid size)
+	offset := GRID_SIZE / 2
+	for x := 0; x < GRID_SIZE; x++ {
+		for z := 0; z < GRID_SIZE; z++ {
+			// Position chunks with offset so they're centered around 0,0
+			chunkX := x - offset
+			chunkZ := z - offset
+			chunkGrid[x][z] = chunk.NewChunkColumn(chunkX, chunkZ)
+			chunkGrid[x][z].Generate()
+		}
+	}
 
 	return &Game{
 		player:           player.NewPlayer(),
 		ui:               ui.NewUI(),
 		screenDimensions: screenDimensions,
-		testColumn:       testColumn,
+		chunkGrid:        chunkGrid,
 	}
-
 }
 
 func (g *Game) Run() error {
@@ -50,7 +63,15 @@ func (g *Game) Run() error {
 
 func (g *Game) Update() {
 	g.player.Update()
-	g.testColumn.Update()
+
+	// Update all chunk columns in the grid
+	for x := 0; x < GRID_SIZE; x++ {
+		for z := 0; z < GRID_SIZE; z++ {
+			if g.chunkGrid[x][z] != nil {
+				g.chunkGrid[x][z].Update()
+			}
+		}
+	}
 }
 
 func (g *Game) Render() {
@@ -59,7 +80,15 @@ func (g *Game) Render() {
 
 	rl.BeginMode3D(g.player.Camera)
 
-	g.testColumn.Render()
+	// Render all generated chunk columns in the grid
+	for x := 0; x < GRID_SIZE; x++ {
+		for z := 0; z < GRID_SIZE; z++ {
+			column := g.chunkGrid[x][z]
+			if column != nil && column.Generated {
+				column.Render()
+			}
+		}
+	}
 
 	rl.EndMode3D()
 
