@@ -76,7 +76,7 @@ func (n Normal) ToVector3() rl.Vector3 {
 func (n Normal) getUV() (rl.Vector3, rl.Vector3) {
 	switch n {
 	case Normal(rl.NewVector3(1, 0, 0)): // Right
-		return rl.NewVector3(0, 0, 1), rl.NewVector3(0, -1, 0)
+		return rl.NewVector3(0, 0, -1), rl.NewVector3(0, 1, 0)
 	case Normal(rl.NewVector3(-1, 0, 0)): // Left
 		return rl.NewVector3(0, 0, 1), rl.NewVector3(0, 1, 0)
 	case Normal(rl.NewVector3(0, 1, 0)): // Up
