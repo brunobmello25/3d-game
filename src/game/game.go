@@ -1,38 +1,62 @@
 package game
 
 import (
+	"github.com/brunobmello25/3d-game/src/block"
+	"github.com/brunobmello25/3d-game/src/mesh"
 	"github.com/brunobmello25/3d-game/src/player"
-	texture_manager "github.com/brunobmello25/3d-game/src/texture"
+	texture "github.com/brunobmello25/3d-game/src/texture"
 	"github.com/brunobmello25/3d-game/src/ui"
-	"github.com/brunobmello25/3d-game/src/utils"
-	"github.com/brunobmello25/3d-game/src/world"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Game struct {
 	ui               *ui.UI
 	player           *player.Player
-	world            *world.World
-	screenDimensions utils.Dimensions
+	screenDimensions rl.Vector2
+	testMesh         rl.Mesh
+	testModel        rl.Model
 }
 
 func NewGame() *Game {
-	screenDimensions := utils.NewDimensions(1200, 675)
+	screenDimensions := rl.NewVector2(1200, 675)
 
 	rl.InitWindow(int32(screenDimensions.X), int32(screenDimensions.Y), "MC Clone")
 
-	texture_manager.Init()
+	texture.Init()
+	texture.InitAtlas() // Initialize the texture atlas
+
+	// Create test mesh
+	meshBuilder := mesh.NewMeshBuilder()
+
+	testBlocks := []struct {
+		position rl.Vector3
+		block    block.Block
+	}{
+		{rl.NewVector3(3, 3, 0), block.NewBlock(block.BlockTypeGrass)},
+		{rl.NewVector3(2, 2, 0), block.NewBlock(block.BlockTypeDirt)},
+		{rl.NewVector3(1, 1, 0), block.NewBlock(block.BlockTypeDirt)},
+		{rl.NewVector3(0, 0, 0), block.NewBlock(block.BlockTypeStone)},
+	}
+	for _, b := range testBlocks {
+		blockCenter := b.position
+		meshBuilder.AddFaces(b.block.Faces[:], blockCenter)
+	}
+
+	testMesh := meshBuilder.Build()
+
+	testModel := rl.LoadModelFromMesh(testMesh)
+	rl.SetMaterialTexture(testModel.Materials, rl.MapDiffuse, texture.GetAtlasTexture())
 
 	return &Game{
 		player:           player.NewPlayer(),
-		world:            world.NewWorld(),
 		ui:               ui.NewUI(),
 		screenDimensions: screenDimensions,
+		testMesh:         testMesh,
+		testModel:        testModel,
 	}
 }
 
 func (g *Game) Run() error {
-
 	rl.DisableCursor()
 	rl.SetTargetFPS(60)
 
@@ -40,6 +64,10 @@ func (g *Game) Run() error {
 		g.Update()
 		g.Render()
 	}
+
+	// Cleanup
+	rl.UnloadModel(g.testModel)
+	rl.UnloadMesh(&g.testMesh)
 
 	rl.CloseWindow()
 	return nil
@@ -55,7 +83,8 @@ func (g *Game) Render() {
 
 	rl.BeginMode3D(g.player.Camera)
 
-	g.world.Draw()
+	// Draw our test model
+	rl.DrawModel(g.testModel, rl.NewVector3(0, 0, -5), 1, rl.White)
 
 	rl.EndMode3D()
 

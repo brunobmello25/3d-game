@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	TEXTURE_NAME_STONE              = "stone"
-	TEXTURE_NAME_DIRT               = "dirt"
-	TEXTURE_NAME_GRASS_TOP          = "grass_top"
-	TEXTURE_NAME_GRASS_SIDE_OVERLAY = "grass_side_overlay"
+	TEXTURE_NAME_STONE      = "stone"
+	TEXTURE_NAME_DIRT       = "dirt"
+	TEXTURE_NAME_GRASS_TOP  = "grass_top"
+	TEXTURE_NAME_GRASS_SIDE = "grass_side"
 )
 
 // Manager handles loading and accessing textures
@@ -34,10 +34,10 @@ func Init() {
 		panic("failed to initialize texture manager")
 	}
 
-	loadTexture(TEXTURE_NAME_STONE, "assets/blocks/stone.png")
-	loadTexture(TEXTURE_NAME_DIRT, "assets/blocks/dirt.png")
-	loadTexture(TEXTURE_NAME_GRASS_TOP, "assets/blocks/grass_top.png")
-	loadTexture(TEXTURE_NAME_GRASS_SIDE_OVERLAY, "assets/blocks/grass_side_overlay.png")
+	loadTexture(TEXTURE_NAME_STONE)
+	loadTexture(TEXTURE_NAME_DIRT)
+	loadTexture(TEXTURE_NAME_GRASS_TOP)
+	loadTexture(TEXTURE_NAME_GRASS_SIDE)
 
 	tm.initialized = true
 }
@@ -74,13 +74,13 @@ func getInstance() *Manager {
 }
 
 // loadTexture loads a texture and stores it with the given name
-func loadTexture(name, path string) {
+func loadTexture(file_name string) {
 	tm := getInstance()
 
+	path := fmt.Sprintf("assets/blocks/%s.png", file_name)
 	texture := rl.LoadTexture(path)
 	if texture.ID == 0 {
-		panic(fmt.Sprintf("failed to load texture: %s", path))
+		panic(fmt.Sprintf("failed to load texture: %s", file_name))
 	}
-	tm.textures[name] = texture
+	tm.textures[file_name] = texture
 }
-
