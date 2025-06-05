@@ -12,7 +12,7 @@ type Game struct {
 	ui               *ui.UI
 	player           *player.Player
 	screenDimensions rl.Vector2
-	testChunks       []*chunk.Chunk
+	testColumn       *chunk.ChunkColumn
 }
 
 func NewGame() *Game {
@@ -23,16 +23,14 @@ func NewGame() *Game {
 	texture.Init()
 	texture.InitAtlas() // Initialize the texture atlas
 
+	testColumn := chunk.NewChunkColumn(0, 0)
+	testColumn.Generate()
+
 	return &Game{
 		player:           player.NewPlayer(),
 		ui:               ui.NewUI(),
 		screenDimensions: screenDimensions,
-		testChunks: []*chunk.Chunk{
-			chunk.NewChunk(rl.NewVector3(0, 0, 0)),
-			chunk.NewChunk(rl.NewVector3(1, 0, 0)),
-			chunk.NewChunk(rl.NewVector3(0, 0, 1)),
-			chunk.NewChunk(rl.NewVector3(1, 0, 1)),
-		},
+		testColumn:       testColumn,
 	}
 
 }
@@ -52,9 +50,7 @@ func (g *Game) Run() error {
 
 func (g *Game) Update() {
 	g.player.Update()
-	for _, c := range g.testChunks {
-		c.Update()
-	}
+	g.testColumn.Update()
 }
 
 func (g *Game) Render() {
@@ -63,9 +59,7 @@ func (g *Game) Render() {
 
 	rl.BeginMode3D(g.player.Camera)
 
-	for _, c := range g.testChunks {
-		c.Render()
-	}
+	g.testColumn.Render()
 
 	rl.EndMode3D()
 
