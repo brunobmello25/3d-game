@@ -29,9 +29,8 @@ func NewGame() *Game {
 		position rl.Vector3
 		block    block.Block
 	}{
-		{rl.NewVector3(-1, 0, -5), block.NewBlock(block.BlockTypeDirt)},
-		{rl.NewVector3(0, 0, -5), block.NewBlock(block.BlockTypeStone)},
-		{rl.NewVector3(1, 0, -5), block.NewBlock(block.BlockTypeDirt)},
+		// {rl.NewVector3(0, 0, 0), block.NewBlock(block.BlockTypeStone)},
+		{rl.NewVector3(0, 1, 0), block.NewBlock(block.BlockTypeGrass)},
 	}
 
 	// Create test mesh

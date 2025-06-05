@@ -93,10 +93,10 @@ func grassBlockFaces() [6]BlockFace {
 	faces := [6]BlockFace{
 		NewFace(FacingDirectionUp, texture.TEXTURE_NAME_GRASS_TOP),
 		NewFace(FacingDirectionDown, texture.TEXTURE_NAME_DIRT),
-		NewFace(FacingDirectionFront, texture.TEXTURE_NAME_DIRT),
-		NewFace(FacingDirectionBack, texture.TEXTURE_NAME_DIRT),
-		NewFace(FacingDirectionLeft, texture.TEXTURE_NAME_DIRT),
-		NewFace(FacingDirectionRight, texture.TEXTURE_NAME_DIRT),
+		NewFace(FacingDirectionFront, texture.TEXTURE_NAME_GRASS_SIDE),
+		NewFace(FacingDirectionBack, texture.TEXTURE_NAME_GRASS_SIDE),
+		NewFace(FacingDirectionLeft, texture.TEXTURE_NAME_GRASS_SIDE),
+		NewFace(FacingDirectionRight, texture.TEXTURE_NAME_GRASS_SIDE),
 	}
 	return faces
 }
