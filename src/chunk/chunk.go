@@ -74,16 +74,18 @@ func (c *Chunk) rebuildMesh() {
 	for i := range len(c.Blocks) {
 		x, y, z := c.delinearize(i)
 
-		blockCenter := rl.NewVector3(
-			c.Position.X*CHUNK_SIZE+float32(x),
-			c.Position.Y*CHUNK_SIZE+float32(y),
-			c.Position.Z*CHUNK_SIZE+float32(z),
-		)
+		localCoord := rl.NewVector3(float32(x), float32(y), float32(z))
+		globalCoord := c.toGlobalCoords(localCoord)
 
 		b := c.Blocks[i]
-		// TODO: only add face if it should actually be rendered
+
 		if !b.Visibility.IsEmpty() {
-			meshBuilder.AddFaces(b.Faces[:], blockCenter)
+			for _, face := range b.Faces {
+				neighbor := c.getNeighbor(localCoord, face)
+				if neighbor == nil || neighbor.Visibility.IsEmpty() {
+					meshBuilder.AddFace(face, globalCoord)
+				}
+			}
 		}
 	}
 
@@ -94,9 +96,42 @@ func (c *Chunk) rebuildMesh() {
 	c.dirty = false
 }
 
+func (c *Chunk) getNeighbor(currentCoord rl.Vector3, currentFace block.BlockFace) *block.Block {
+	normal := currentFace.Direction.GetNormal()
+	neighborCoord := rl.NewVector3(
+		currentCoord.X+normal.X,
+		currentCoord.Y+normal.Y,
+		currentCoord.Z+normal.Z,
+	)
+
+	if neighborCoord.X < 0 || neighborCoord.X >= CHUNK_SIZE ||
+		neighborCoord.Y < 0 || neighborCoord.Y >= CHUNK_SIZE ||
+		neighborCoord.Z < 0 || neighborCoord.Z >= CHUNK_SIZE {
+		return nil
+	}
+
+	neighborIndex := c.linearize(int(neighborCoord.X), int(neighborCoord.Y), int(neighborCoord.Z))
+	return &c.Blocks[neighborIndex]
+}
+
+func (c *Chunk) toGlobalCoords(coords rl.Vector3) rl.Vector3 {
+	return rl.NewVector3(
+		c.Position.X*CHUNK_SIZE+coords.X,
+		c.Position.Y*CHUNK_SIZE+coords.Y,
+		c.Position.Z*CHUNK_SIZE+coords.Z,
+	)
+}
+
 func (c *Chunk) delinearize(index int) (int, int, int) {
 	x := index % CHUNK_SIZE
 	y := (index / CHUNK_SIZE) % CHUNK_SIZE
 	z := index / (CHUNK_SIZE * CHUNK_SIZE)
 	return x, y, z
+}
+
+func (c *Chunk) linearize(x, y, z int) int {
+	if x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE || z < 0 || z >= CHUNK_SIZE {
+		panic(fmt.Sprintf("Coordinates out of bounds: (%d, %d, %d)", x, y, z))
+	}
+	return x + y*CHUNK_SIZE + z*CHUNK_SIZE*CHUNK_SIZE
 }
