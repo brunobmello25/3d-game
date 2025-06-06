@@ -14,16 +14,14 @@ const CHUNK_COLUMN_HEIGHT = 16
 const HEIGHT_OFFSET = 50
 
 type ChunkColumn struct {
-	Chunks    [CHUNK_COLUMN_HEIGHT]*Chunk
-	X, Z      int
-	Generated bool
+	Chunks [CHUNK_COLUMN_HEIGHT]*Chunk
+	X, Z   int
 }
 
 func NewChunkColumn(X, Z int) *ChunkColumn {
 	column := &ChunkColumn{
-		X:         X,
-		Z:         Z,
-		Generated: false,
+		X: X,
+		Z: Z,
 	}
 	for i := range CHUNK_COLUMN_HEIGHT {
 		position := rl.NewVector3(float32(X), float32(i), float32(Z))
@@ -42,7 +40,6 @@ func (cc *ChunkColumn) Generate() {
 			c.SetBlock(chunkX, chunkY, chunkZ, block)
 		}
 	}
-	cc.Generated = true
 }
 
 func (cc *ChunkColumn) Update() {

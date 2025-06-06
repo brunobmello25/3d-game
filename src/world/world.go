@@ -34,31 +34,32 @@ func (w *World) Render() {
 }
 
 func (w *World) loadAroundPlayer(px, pz int) {
-	minx := (px / chunk.CHUNK_SIZE) - RENDER_DISTANCE
-	minz := (pz / chunk.CHUNK_SIZE) - RENDER_DISTANCE
-	maxx := (px / chunk.CHUNK_SIZE) + RENDER_DISTANCE
-	maxz := (pz / chunk.CHUNK_SIZE) + RENDER_DISTANCE
+	// Convert player position to chunk coordinates
+	chunkX := px / chunk.CHUNK_SIZE
+	chunkZ := pz / chunk.CHUNK_SIZE
 
-	// unload unecessary chunks
-	// TODO: this breaks the game
-	// for key := range w.ChunkColumns {
-	// 	x, z := keyToPos(key)
-	// 	distance := (x-px)*(x-px) + (z-pz)*(z-pz)
-	// 	if distance > RENDER_DISTANCE*RENDER_DISTANCE {
-	// 		w.ChunkColumns[key].Unload()
-	// 		w.ChunkColumns[key] = nil
-	// 	}
-	// }
+	// Track which chunks should be kept
+	keepChunks := make(map[string]bool)
 
-	fmt.Println("min x:", minx, "minz:", minz, "maxx:", maxx, "maxz:", maxz)
-	// load proper chunks
-	for x := minx; x <= maxx; x++ {
-		for z := minz; z <= maxz; z++ {
+	// Load chunks within render distance
+	for x := chunkX - RENDER_DISTANCE; x <= chunkX+RENDER_DISTANCE; x++ {
+		for z := chunkZ - RENDER_DISTANCE; z <= chunkZ+RENDER_DISTANCE; z++ {
 			key := posToKey(x, z)
+			keepChunks[key] = true
+
+			// If chunk doesn't exist, create it
 			if _, exists := w.ChunkColumns[key]; !exists {
 				w.ChunkColumns[key] = chunk.NewChunkColumn(x, z)
 				w.ChunkColumns[key].Generate()
 			}
+		}
+	}
+
+	// Unload chunks that are too far
+	for key, column := range w.ChunkColumns {
+		if !keepChunks[key] {
+			column.Unload()
+			delete(w.ChunkColumns, key)
 		}
 	}
 }

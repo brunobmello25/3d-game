@@ -12,18 +12,16 @@ import (
 const CHUNK_SIZE = 16 // 16x16x16 blocks
 
 type Chunk struct {
-	Blocks        [CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE]block.Block
-	Position      rl.Vector3
-	dirty         bool
-	mesh          rl.Mesh
-	model         rl.Model
-	meshFaceCount int
+	Blocks   [CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE]block.Block
+	Position rl.Vector3
+	dirty    bool
+	mesh     rl.Mesh
+	model    rl.Model
 }
 
 func NewChunk(position rl.Vector3) *Chunk {
 	c := &Chunk{
-		Position:      position,
-		meshFaceCount: 0,
+		Position: position,
 	}
 
 	c.rebuildMesh()
@@ -59,18 +57,8 @@ func (c *Chunk) Render() {
 	rl.DrawModel(c.model, rl.NewVector3(c.Position.X*CHUNK_SIZE, c.Position.Y*CHUNK_SIZE, c.Position.Z*CHUNK_SIZE), 1.0, rl.White)
 }
 
-func (c *Chunk) Cleanup() {
-	if c.model.Meshes != nil {
-		rl.UnloadModel(c.model)
-	}
-	if c.mesh.VertexCount > 0 {
-		rl.UnloadMesh(&c.mesh)
-	}
-}
-
 func (c *Chunk) rebuildMesh() {
 	meshBuilder := mesh.NewMeshBuilder()
-	c.unloadMesh()
 
 	for i := range len(c.Blocks) {
 		x, y, z := c.Delinearize(i)
@@ -84,7 +72,6 @@ func (c *Chunk) rebuildMesh() {
 				neighbor := c.getNeighbor(localCoord, face)
 				if neighbor == nil || neighbor.Visibility.IsEmpty() {
 					meshBuilder.AddFace(face, localCoord)
-					c.meshFaceCount++
 				}
 			}
 		}
@@ -98,13 +85,16 @@ func (c *Chunk) rebuildMesh() {
 }
 
 func (c *Chunk) unloadMesh() {
-	if c.meshFaceCount > 0 {
-		rl.UnloadMesh(&c.mesh)
-		rl.UnloadModel(c.model)
-		c.model = rl.Model{}
-		c.mesh = rl.Mesh{}
-		c.meshFaceCount = 0
+	if c.model.Meshes == nil {
+		return
 	}
+
+	c.model.Meshes.Vertices = nil
+	c.model.Meshes.Normals = nil
+	c.model.Meshes.Texcoords = nil
+	c.model = rl.Model{}
+	c.mesh = rl.Mesh{}
+	rl.UnloadModel(c.model)
 }
 
 func (c *Chunk) getNeighbor(currentCoord rl.Vector3, currentFace block.BlockFace) *block.Block {
