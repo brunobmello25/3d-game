@@ -11,6 +11,8 @@ import (
 
 const CHUNK_SIZE = 16 // 16x16x16 blocks
 
+var counter = 0
+
 type Chunk struct {
 	Blocks        [CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE]block.Block
 	Position      rl.Vector3
@@ -92,6 +94,9 @@ func (c *Chunk) rebuildMesh() {
 
 	c.mesh = meshBuilder.Build()
 	c.model = rl.LoadModelFromMesh(c.mesh)
+	counter += 1
+	fmt.Println("UNLOAD COUNT: ", counter)
+	rl.UnloadModel(c.model)
 	rl.SetMaterialTexture(c.model.Materials, rl.MapDiffuse, texture.GetAtlasTexture())
 
 	c.dirty = false
