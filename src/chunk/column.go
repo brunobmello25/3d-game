@@ -57,6 +57,12 @@ func (cc *ChunkColumn) Render() {
 	}
 }
 
+func (cc *ChunkColumn) Unload() {
+	for i := range cc.Chunks {
+		cc.Chunks[i].Unload()
+	}
+}
+
 func (cc *ChunkColumn) getBlockForPosition(x, y, z int) block.Block {
 	btype := block.BlockTypeAir
 

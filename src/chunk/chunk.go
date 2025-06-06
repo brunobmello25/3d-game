@@ -12,16 +12,18 @@ import (
 const CHUNK_SIZE = 16 // 16x16x16 blocks
 
 type Chunk struct {
-	Blocks   [CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE]block.Block
-	Position rl.Vector3
-	dirty    bool
-	mesh     rl.Mesh
-	model    rl.Model
+	Blocks        [CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE]block.Block
+	Position      rl.Vector3
+	dirty         bool
+	mesh          rl.Mesh
+	model         rl.Model
+	meshFaceCount int
 }
 
 func NewChunk(position rl.Vector3) *Chunk {
 	c := &Chunk{
-		Position: position,
+		Position:      position,
+		meshFaceCount: 0,
 	}
 
 	c.rebuildMesh()
@@ -45,6 +47,14 @@ func (c *Chunk) Update() {
 	}
 }
 
+func (c *Chunk) Unload() {
+	c.unloadMesh()
+
+	c.Blocks = [CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE]block.Block{} // Reset blocks
+
+	c.dirty = false
+}
+
 func (c *Chunk) Render() {
 	rl.DrawModel(c.model, rl.NewVector3(c.Position.X*CHUNK_SIZE, c.Position.Y*CHUNK_SIZE, c.Position.Z*CHUNK_SIZE), 1.0, rl.White)
 }
@@ -60,6 +70,7 @@ func (c *Chunk) Cleanup() {
 
 func (c *Chunk) rebuildMesh() {
 	meshBuilder := mesh.NewMeshBuilder()
+	c.unloadMesh()
 
 	for i := range len(c.Blocks) {
 		x, y, z := c.Delinearize(i)
@@ -73,6 +84,7 @@ func (c *Chunk) rebuildMesh() {
 				neighbor := c.getNeighbor(localCoord, face)
 				if neighbor == nil || neighbor.Visibility.IsEmpty() {
 					meshBuilder.AddFace(face, localCoord)
+					c.meshFaceCount++
 				}
 			}
 		}
@@ -83,6 +95,16 @@ func (c *Chunk) rebuildMesh() {
 	rl.SetMaterialTexture(c.model.Materials, rl.MapDiffuse, texture.GetAtlasTexture())
 
 	c.dirty = false
+}
+
+func (c *Chunk) unloadMesh() {
+	if c.meshFaceCount > 0 {
+		rl.UnloadMesh(&c.mesh)
+		rl.UnloadModel(c.model)
+		c.model = rl.Model{}
+		c.mesh = rl.Mesh{}
+		c.meshFaceCount = 0
+	}
 }
 
 func (c *Chunk) getNeighbor(currentCoord rl.Vector3, currentFace block.BlockFace) *block.Block {

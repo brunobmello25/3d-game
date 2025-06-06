@@ -5,3 +5,7 @@ This is a (yet another) Minecraft Clone project, made with golang and raylib for
 ## Resources
 
 - [PlaySpaceFarer's Voxel Meshing Article](https://playspacefarer.com/voxel-meshing/)
+
+## TODO
+
+- [ ] extrair struct de coordenada para uma struct própria - usar vector3 usa float desnecessariamente

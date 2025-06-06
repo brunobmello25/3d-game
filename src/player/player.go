@@ -15,11 +15,12 @@ type Player struct {
 }
 
 func NewPlayer() *Player {
-	position := rl.NewVector3(40, 80, 30)
+	position := rl.NewVector3(0, 80, 0)
+	target := rl.Vector3Add(position, rl.NewVector3(0, 0, -1))
 	return &Player{
 		Camera: rl.NewCamera3D(
 			position,
-			rl.NewVector3(0, 0, 0), // target
+			target,                 // target
 			rl.NewVector3(0, 1, 0), // up
 			60,
 			rl.CameraPerspective,
