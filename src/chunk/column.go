@@ -1,9 +1,8 @@
 package chunk
 
 import (
-	"math"
-
 	"github.com/brunobmello25/3d-game/src/block"
+	"github.com/brunobmello25/3d-game/src/noise"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -63,7 +62,7 @@ func (cc *ChunkColumn) Unload() {
 func (cc *ChunkColumn) getBlockForPosition(x, y, z int) block.Block {
 	btype := block.BlockTypeAir
 
-	maxHeight := int(simpleNoise(x, z) + HEIGHT_OFFSET)
+	maxHeight := int(noise.Noise2D(x, z) + HEIGHT_OFFSET)
 
 	// from bottom to 20 blocks up should be stone, then dirt up to the second to last block, and the last should be grass
 	if y < 20 {
@@ -79,9 +78,4 @@ func (cc *ChunkColumn) getBlockForPosition(x, y, z int) block.Block {
 
 func (cc *ChunkColumn) localToGlobal(x, y, z, i int) (int, int, int) {
 	return cc.X*CHUNK_SIZE + x, i*CHUNK_SIZE + y, cc.Z*CHUNK_SIZE + z
-}
-
-func simpleNoise(x, z int) float64 {
-	// noise function using sin and cos
-	return (math.Sin(float64(x)*0.1) + math.Cos(float64(z)*0.1)) * 10
 }

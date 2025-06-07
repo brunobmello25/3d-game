@@ -5,7 +5,13 @@ This is a (yet another) Minecraft Clone project, made with golang and raylib for
 ## Resources
 
 - [PlaySpaceFarer's Voxel Meshing Article](https://playspacefarer.com/voxel-meshing/)
+- [Perlin Noise](https://rtouti.github.io/graphics/perlin-noise-algorithm)
 
 ## TODO
 
-- [ ] extrair struct de coordenada para uma struct própria - usar vector3 usa float desnecessariamente
+- [ ] extract chunk coords and player coords to a separate struct in a "position" package. Working with vector3 uses float unnecessarily.
+- [ ] extract the world loading and unloading into a separate thread.
+
+## Maybe one day
+
+- [ ] replace this perlin noise implementation with a DIY one so I can understand it better.
