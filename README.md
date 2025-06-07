@@ -5,6 +5,7 @@ This is a (yet another) Minecraft Clone project, made with golang and raylib for
 ## Resources
 
 - [PlaySpaceFarer's Voxel Meshing Article](https://playspacefarer.com/voxel-meshing/)
+- [Perlin Noise](https://rtouti.github.io/graphics/perlin-noise-algorithm)
 
 ## TODO
 
