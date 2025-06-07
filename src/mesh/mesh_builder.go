@@ -11,6 +11,7 @@ type MeshBuilder struct {
 	vertices    []float32
 	normals     []float32
 	texcoords   []float32
+	colors      []uint8
 	indices     []uint16
 	vertexCount int
 }
@@ -20,6 +21,7 @@ func NewMeshBuilder() *MeshBuilder {
 		vertices:    make([]float32, 0),
 		normals:     make([]float32, 0),
 		texcoords:   make([]float32, 0),
+		colors:      make([]uint8, 0),
 		indices:     make([]uint16, 0),
 		vertexCount: 0,
 	}
@@ -41,6 +43,9 @@ func (mb *MeshBuilder) AddFace(face block.BlockFace, faceCenter rl.Vector3) {
 	// Add texture coordinates
 	mb.texcoords = append(mb.texcoords, face.GetTextureCoords()...)
 
+	// Add vertex colors for lighting
+	mb.colors = append(mb.colors, face.GetVertexColors()...)
+
 	// Add indices (assuming each face is a quad with 2 triangles)
 	baseIndex := uint16(mb.vertexCount)
 	mb.indices = append(mb.indices,
@@ -61,6 +66,7 @@ func (mb *MeshBuilder) Build() rl.Mesh {
 	mesh.Vertices = unsafe.SliceData(mb.vertices)
 	mesh.Normals = unsafe.SliceData(mb.normals)
 	mesh.Texcoords = unsafe.SliceData(mb.texcoords)
+	mesh.Colors = unsafe.SliceData(mb.colors)
 	mesh.Indices = unsafe.SliceData(mb.indices)
 
 	// Upload mesh data to GPU
@@ -73,6 +79,7 @@ func (mb *MeshBuilder) Clear() {
 	mb.vertices = make([]float32, 0)
 	mb.normals = make([]float32, 0)
 	mb.texcoords = make([]float32, 0)
+	mb.colors = make([]uint8, 0)
 	mb.indices = make([]uint16, 0)
 	mb.vertexCount = 0
 }

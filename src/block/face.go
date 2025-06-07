@@ -67,6 +67,86 @@ func (f BlockFace) GetTextureCoords() []float32 {
 	}
 }
 
+func (f BlockFace) GetVertexColors() []uint8 {
+	// Get base lighting color for this face direction
+	baseColor := getLightingColor(f.Direction)
+
+	// Create gradient within the face for better visual distinction
+	// The gradient varies based on the face direction to create consistent lighting
+	var colors [4]rl.Color
+
+	switch f.Direction {
+	case FacingDirectionUp:
+		// Top face: gradient from front to back (darker in back)
+		colors[0] = modulateColor(baseColor, 0.9)  // bottom-left (front): slightly darker
+		colors[1] = modulateColor(baseColor, 0.95) // bottom-right (front): slightly darker
+		colors[2] = modulateColor(baseColor, 1.0)  // top-right (back): base brightness
+		colors[3] = modulateColor(baseColor, 0.85) // top-left (back): darker
+
+	case FacingDirectionDown:
+		// Bottom face: gradient from back to front (darker in front)
+		colors[0] = modulateColor(baseColor, 1.0)  // bottom-left: base brightness
+		colors[1] = modulateColor(baseColor, 0.9)  // bottom-right: darker
+		colors[2] = modulateColor(baseColor, 0.8)  // top-right: darkest
+		colors[3] = modulateColor(baseColor, 0.95) // top-left: slightly darker
+
+	case FacingDirectionFront, FacingDirectionBack:
+		// Front/Back faces: gradient from top to bottom (darker at bottom)
+		colors[0] = modulateColor(baseColor, 0.8)  // bottom-left: darker
+		colors[1] = modulateColor(baseColor, 0.85) // bottom-right: darker
+		colors[2] = modulateColor(baseColor, 1.0)  // top-right: brightest
+		colors[3] = modulateColor(baseColor, 0.95) // top-left: bright
+
+	case FacingDirectionLeft, FacingDirectionRight:
+		// Side faces: gradient from top to bottom and slight left-right variation
+		colors[0] = modulateColor(baseColor, 0.75) // bottom-left: darkest
+		colors[1] = modulateColor(baseColor, 0.8)  // bottom-right: dark
+		colors[2] = modulateColor(baseColor, 0.95) // top-right: bright
+		colors[3] = modulateColor(baseColor, 0.9)  // top-left: medium-bright
+	}
+
+	// Return colors for all 4 vertices (RGBA format)
+	return []uint8{
+		colors[0].R, colors[0].G, colors[0].B, colors[0].A, // bottom-left
+		colors[1].R, colors[1].G, colors[1].B, colors[1].A, // bottom-right
+		colors[2].R, colors[2].G, colors[2].B, colors[2].A, // top-right
+		colors[3].R, colors[3].G, colors[3].B, colors[3].A, // top-left
+	}
+}
+
+func modulateColor(color rl.Color, factor float32) rl.Color {
+	// Clamp factor to prevent overflow
+	if factor > 1.0 {
+		factor = 1.0
+	}
+	if factor < 0.0 {
+		factor = 0.0
+	}
+
+	return rl.Color{
+		R: uint8(float32(color.R) * factor),
+		G: uint8(float32(color.G) * factor),
+		B: uint8(float32(color.B) * factor),
+		A: color.A,
+	}
+}
+
+func getLightingColor(direction FacingDirection) rl.Color {
+	// Different lighting levels for each face direction
+	switch direction {
+	case FacingDirectionUp:
+		return rl.Color{R: 255, G: 255, B: 255, A: 255} // Full brightness for top faces
+	case FacingDirectionDown:
+		return rl.Color{R: 100, G: 100, B: 100, A: 255} // Darkest for bottom faces
+	case FacingDirectionFront, FacingDirectionBack:
+		return rl.Color{R: 200, G: 200, B: 200, A: 255} // Medium-bright for front/back faces
+	case FacingDirectionLeft, FacingDirectionRight:
+		return rl.Color{R: 150, G: 150, B: 150, A: 255} // Medium-dark for left/right faces
+	default:
+		return rl.Color{R: 255, G: 255, B: 255, A: 255} // Default to full brightness
+	}
+}
+
 type Normal rl.Vector3
 
 func (n Normal) ToVector3() rl.Vector3 {
